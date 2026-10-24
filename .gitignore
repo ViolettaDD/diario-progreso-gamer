@@ -1,0 +1,13 @@
+# Dependencias y compilados (se regeneran con npm install / npm run build)
+node_modules/
+dist/
+
+# Secretos: el .env real NUNCA se sube. Solo .env.example
+.env
+.env.*
+!.env.example
+
+# Sistema y logs
+.DS_Store
+Thumbs.db
+*.log
