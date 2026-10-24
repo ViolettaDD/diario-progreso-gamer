@@ -1,0 +1,72 @@
+# Pruebas manuales de la API (Thunder Client o REST Client). Solo backend local.
+# Reemplaza VIDEOJUEGO_ID, PARTIDA_ID y LOGRO_ID por ids reales de tus respuestas.
+
+### Salud
+GET http://localhost:3000/api/salud
+
+### 1. Crear videojuego con logros embebidos (201)
+POST http://localhost:3000/api/videojuegos
+Content-Type: application/json
+
+{"nombre": "Hollow Knight", "plataforma": "Switch", "genero": "accion", "estado": "jugando", "logros": [{"nombre": "Derrotar al Falso Caballero"}, {"nombre": "Conseguir el Ala de Mantis"}, {"nombre": "Llegar a Ciudad Lágrimas"}]}
+
+### 2. Listar videojuegos (con filtro opcional por estado)
+GET http://localhost:3000/api/videojuegos?estado=jugando
+
+### 3. Obtener por id
+GET http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID
+
+### 4. Actualizar (parcial)
+PUT http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID
+Content-Type: application/json
+
+{"estado": "pausado"}
+
+### 5. Marcar un logro como obtenido (sub-documento embebido)
+PATCH http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID/logros/LOGRO_ID
+Content-Type: application/json
+
+{"obtenido": true}
+
+### 6. Registrar partidas (repetir 3+ veces con distintas fechas)
+POST http://localhost:3000/api/partidas
+Content-Type: application/json
+
+{"videojuego": "VIDEOJUEGO_ID", "fecha": "2026-10-20", "duracionMinutos": 90, "porcentajeAvance": 25, "notas": "Primer jefe"}
+
+### 7. Listar todas las partidas (con populate del videojuego)
+GET http://localhost:3000/api/partidas
+
+### 8. Ruta anidada: partidas de un videojuego
+GET http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID/partidas
+
+### 9. Resumen calculado
+GET http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID/resumen
+
+### 10. Actualizar y eliminar partida
+PUT http://localhost:3000/api/partidas/PARTIDA_ID
+Content-Type: application/json
+
+{"notas": "Nota corregida"}
+
+### 
+DELETE http://localhost:3000/api/partidas/PARTIDA_ID
+
+
+### ERROR 1 · Validación de esquema → 400 "validacion"
+POST http://localhost:3000/api/videojuegos
+Content-Type: application/json
+
+{"nombre": "", "plataforma": "Atari", "genero": "accion"}
+
+### ERROR 2 · Id mal formado (CastError) → 400 "id_mal_formado"
+GET http://localhost:3000/api/videojuegos/abc
+
+### ERROR 3 · Referencia inexistente → 404 "referencia_inexistente"
+POST http://localhost:3000/api/partidas
+Content-Type: application/json
+
+{"videojuego": "65afffffffffffffffffffff", "fecha": "2026-10-20", "duracionMinutos": 30, "porcentajeAvance": 10}
+
+### ERROR 4 · Error inesperado → 500 "interno" (requiere PERMITIR_ERROR_PRUEBA=true en el .env local)
+GET http://localhost:3000/api/debug/error
