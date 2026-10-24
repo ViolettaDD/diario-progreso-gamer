@@ -8,9 +8,9 @@ Aplicación web MERN (MongoDB, Express, React, Node.js con TypeScript) para llev
 
 | Servicio | URL |
 |---|---|
-| Frontend (Static Site) | `PENDIENTE: https://TU-FRONTEND.onrender.com` |
-| API (Web Service) | `PENDIENTE: https://TU-API.onrender.com` |
-| Salud del API | `PENDIENTE: https://TU-API.onrender.com/api/salud` |
+| Frontend (Static Site) | https://diario-gamer-violettadd.onrender.com |
+| API (Web Service) | https://diario-gamer-api-violettadd.onrender.com |
+| Salud del API | https://diario-gamer-api-violettadd.onrender.com/api/salud |
 
 > El plan gratuito de Render apaga el API tras 15 minutos sin visitas: la primera carga puede tardar cerca de un minuto.
 
