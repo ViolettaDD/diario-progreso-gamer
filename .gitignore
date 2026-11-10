@@ -1,6 +1,7 @@
 # Dependencias y compilados (se regeneran con npm install / npm run build)
 node_modules/
 dist/
+.vite/
 
 # Secretos: el .env real NUNCA se sube. Solo .env.example
 .env
