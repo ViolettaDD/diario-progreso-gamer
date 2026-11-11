@@ -17,7 +17,8 @@ export async function crearVideojuego(datos: VideojuegoInput): Promise<Videojueg
 }
 
 export async function actualizarVideojuego(id: string, datos: VideojuegoInput): Promise<Videojuego> {
-  return (await http<{ videojuego: Videojuego }>(`${BASE}/${id}`, { method: 'PUT', body: JSON.stringify(datos) })).videojuego;
+  return (await http<{ videojuego: Videojuego }>(`${BASE}/${id}`, { method: 'PUT', body: JSON.stringify(datos) }))
+    .videojuego;
 }
 
 export async function eliminarVideojuego(id: string): Promise<void> {
@@ -31,5 +32,6 @@ export async function obtenerResumen(id: string): Promise<Resumen> {
 
 export async function marcarLogro(id: string, logroId: string, obtenido: boolean): Promise<Videojuego> {
   const ruta = `${BASE}/${id}/logros/${logroId}`;
-  return (await http<{ videojuego: Videojuego }>(ruta, { method: 'PATCH', body: JSON.stringify({ obtenido }) })).videojuego;
+  return (await http<{ videojuego: Videojuego }>(ruta, { method: 'PATCH', body: JSON.stringify({ obtenido }) }))
+    .videojuego;
 }

@@ -101,7 +101,12 @@ export function idVideojuego(v: Partida['videojuego']): string {
 
 /** Las fechas se guardan como medianoche UTC; se muestran en UTC para no correr el día. */
 export function formatearFecha(iso: string): string {
-  return new Date(iso).toLocaleDateString('es-EC', { timeZone: 'UTC', day: '2-digit', month: 'short', year: 'numeric' });
+  return new Date(iso).toLocaleDateString('es-EC', {
+    timeZone: 'UTC',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
 }
 
 /** Fecha local de hoy en formato YYYY-MM-DD (valor por defecto del formulario de partida). */

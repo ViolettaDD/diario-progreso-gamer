@@ -11,7 +11,13 @@ export function FormularioPartida() {
   const preseleccion = query.get('videojuegoId') ?? '';
   const navigate = useNavigate();
   const [juegos, setJuegos] = useState<Videojuego[]>([]);
-  const [form, setForm] = useState<PartidaInput>({ videojuego: '', fecha: hoyISO(), duracionMinutos: 60, porcentajeAvance: 0, notas: '' });
+  const [form, setForm] = useState<PartidaInput>({
+    videojuego: '',
+    fecha: hoyISO(),
+    duracionMinutos: 60,
+    porcentajeAvance: 0,
+    notas: '',
+  });
   const [cargando, setCargando] = useState(true);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -89,7 +95,8 @@ export function FormularioPartida() {
 
       {juegos.length === 0 ? (
         <p className="estado estado-vacio">
-          Para registrar una partida primero necesitas un juego. <Link to="/videojuegos/nuevo">Agrega tu primer juego.</Link>
+          Para registrar una partida primero necesitas un juego.{' '}
+          <Link to="/videojuegos/nuevo">Agrega tu primer juego.</Link>
         </p>
       ) : (
         <>
@@ -102,7 +109,11 @@ export function FormularioPartida() {
             <fieldset disabled={guardando}>
               <label className="campo">
                 Juego
-                <select required value={form.videojuego} onChange={(e) => setForm({ ...form, videojuego: e.target.value })}>
+                <select
+                  required
+                  value={form.videojuego}
+                  onChange={(e) => setForm({ ...form, videojuego: e.target.value })}
+                >
                   {juegos.map((v) => (
                     <option key={v._id} value={v._id}>
                       {v.nombre}
@@ -114,7 +125,12 @@ export function FormularioPartida() {
               <div className="fila">
                 <label className="campo">
                   Fecha
-                  <input required type="date" value={form.fecha} onChange={(e) => setForm({ ...form, fecha: e.target.value })} />
+                  <input
+                    required
+                    type="date"
+                    value={form.fecha}
+                    onChange={(e) => setForm({ ...form, fecha: e.target.value })}
+                  />
                 </label>
                 <label className="campo">
                   Duración (minutos)
@@ -142,7 +158,12 @@ export function FormularioPartida() {
 
               <label className="campo">
                 Notas (opcional)
-                <textarea maxLength={500} rows={3} value={form.notas} onChange={(e) => setForm({ ...form, notas: e.target.value })} />
+                <textarea
+                  maxLength={500}
+                  rows={3}
+                  value={form.notas}
+                  onChange={(e) => setForm({ ...form, notas: e.target.value })}
+                />
               </label>
 
               <button type="submit" className="boton">

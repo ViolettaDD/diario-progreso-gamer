@@ -11,7 +11,11 @@ export function exigirObjeto(body: unknown): Record<string, unknown> {
 }
 
 /** Lista blanca: copia solo los campos permitidos (evita operadores y campos internos como _id). */
-export function elegirCampos(body: unknown, permitidos: readonly string[], exigirAlguno = false): Record<string, unknown> {
+export function elegirCampos(
+  body: unknown,
+  permitidos: readonly string[],
+  exigirAlguno = false,
+): Record<string, unknown> {
   const datos = exigirObjeto(body);
   const resultado: Record<string, unknown> = {};
   for (const campo of permitidos) {

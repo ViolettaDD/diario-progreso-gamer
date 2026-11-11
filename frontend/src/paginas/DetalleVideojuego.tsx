@@ -97,7 +97,11 @@ export function DetalleVideojuego() {
         <Link to="/" className="volver">
           Volver a mis juegos
         </Link>
-        <EstadoCarga cargando={false} error={error ?? 'Videojuego no encontrado.'} onReintentar={() => setRecarga((x) => x + 1)} />
+        <EstadoCarga
+          cargando={false}
+          error={error ?? 'Videojuego no encontrado.'}
+          onReintentar={() => setRecarga((x) => x + 1)}
+        />
       </section>
     );
   }
@@ -140,18 +144,27 @@ export function DetalleVideojuego() {
       <div className="columnas">
         <section className="panel" aria-labelledby="titulo-logros">
           <h2 id="titulo-logros">
-            Logros <span className="contador">{obtenidos}/{juego.logros.length}</span>
+            Logros{' '}
+            <span className="contador">
+              {obtenidos}/{juego.logros.length}
+            </span>
           </h2>
           {juego.logros.length === 0 ? (
             <p className="estado estado-vacio">
-              Este juego aún no tiene logros. <Link to={`/videojuegos/${id}/editar`}>Agrégalos al editar el juego.</Link>
+              Este juego aún no tiene logros.{' '}
+              <Link to={`/videojuegos/${id}/editar`}>Agrégalos al editar el juego.</Link>
             </p>
           ) : (
             <ul className="lista-logros">
               {juego.logros.map((logro) => (
                 <li key={logro._id}>
                   <label className={logro.obtenido ? 'logro logro-obtenido' : 'logro'}>
-                    <input type="checkbox" checked={logro.obtenido} disabled={ocupado} onChange={() => alternarLogro(logro)} />
+                    <input
+                      type="checkbox"
+                      checked={logro.obtenido}
+                      disabled={ocupado}
+                      onChange={() => alternarLogro(logro)}
+                    />
                     <span>{logro.nombre}</span>
                   </label>
                 </li>
@@ -168,7 +181,9 @@ export function DetalleVideojuego() {
             </Link>
           </div>
           {partidas.length === 0 ? (
-            <p className="estado estado-vacio">Aún no registras partidas de este juego. Registra la primera para ver tu progreso.</p>
+            <p className="estado estado-vacio">
+              Aún no registras partidas de este juego. Registra la primera para ver tu progreso.
+            </p>
           ) : (
             <div className="tabla-contenedor">
               <table className="tabla">
@@ -191,7 +206,12 @@ export function DetalleVideojuego() {
                       <td>{p.porcentajeAvance}%</td>
                       <td>{p.notas || '—'}</td>
                       <td>
-                        <button type="button" className="boton-texto" disabled={ocupado} onClick={() => borrarPartida(p)}>
+                        <button
+                          type="button"
+                          className="boton-texto"
+                          disabled={ocupado}
+                          onClick={() => borrarPartida(p)}
+                        >
                           Eliminar
                         </button>
                       </td>

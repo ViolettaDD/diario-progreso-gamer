@@ -90,7 +90,13 @@ export function ListaPartidas() {
                 return (
                   <tr key={p._id}>
                     <td>{formatearFecha(p.fecha)}</td>
-                    <td>{juegoId ? <Link to={`/videojuegos/${juegoId}`}>{nombreVideojuego(p.videojuego)}</Link> : nombreVideojuego(p.videojuego)}</td>
+                    <td>
+                      {juegoId ? (
+                        <Link to={`/videojuegos/${juegoId}`}>{nombreVideojuego(p.videojuego)}</Link>
+                      ) : (
+                        nombreVideojuego(p.videojuego)
+                      )}
+                    </td>
                     <td>{p.duracionMinutos} min</td>
                     <td>{p.porcentajeAvance}%</td>
                     <td>{p.notas || '—'}</td>

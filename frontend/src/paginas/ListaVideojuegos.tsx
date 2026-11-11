@@ -76,7 +76,9 @@ export function ListaVideojuegos() {
                 <div className="etiquetas">
                   <span className="etiqueta">{ETIQUETAS_PLATAFORMA[juego.plataforma]}</span>
                   <span className="etiqueta">{ETIQUETAS_GENERO[juego.genero]}</span>
-                  <span className={`etiqueta etiqueta-estado estado-${juego.estado}`}>{ETIQUETAS_ESTADO[juego.estado]}</span>
+                  <span className={`etiqueta etiqueta-estado estado-${juego.estado}`}>
+                    {ETIQUETAS_ESTADO[juego.estado]}
+                  </span>
                 </div>
                 <p className="ranura-logros">
                   {juego.logros.length ? `${obtenidos} de ${juego.logros.length} logros` : 'Sin logros'}

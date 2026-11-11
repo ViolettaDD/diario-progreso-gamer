@@ -2,7 +2,15 @@ import { FormEvent, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { actualizarVideojuego, crearVideojuego, obtenerVideojuego } from '../api/videojuegosApi';
 import { EstadoCarga } from '../components/EstadoCarga';
-import { ESTADOS, ETIQUETAS_ESTADO, ETIQUETAS_GENERO, ETIQUETAS_PLATAFORMA, GENEROS, PLATAFORMAS, mensajeDeError } from '../tipos';
+import {
+  ESTADOS,
+  ETIQUETAS_ESTADO,
+  ETIQUETAS_GENERO,
+  ETIQUETAS_PLATAFORMA,
+  GENEROS,
+  PLATAFORMAS,
+  mensajeDeError,
+} from '../tipos';
 import type { Estado, Genero, LogroInput, Plataforma, VideojuegoInput } from '../tipos';
 
 const VACIO: VideojuegoInput = { nombre: '', plataforma: 'PC', genero: 'accion', estado: 'jugando', logros: [] };
@@ -106,13 +114,21 @@ export function FormularioVideojuego() {
           <fieldset disabled={guardando}>
             <label className="campo">
               Nombre
-              <input required maxLength={100} value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} />
+              <input
+                required
+                maxLength={100}
+                value={form.nombre}
+                onChange={(e) => setForm({ ...form, nombre: e.target.value })}
+              />
             </label>
 
             <div className="fila">
               <label className="campo">
                 Plataforma
-                <select value={form.plataforma} onChange={(e) => setForm({ ...form, plataforma: e.target.value as Plataforma })}>
+                <select
+                  value={form.plataforma}
+                  onChange={(e) => setForm({ ...form, plataforma: e.target.value as Plataforma })}
+                >
                   {PLATAFORMAS.map((p) => (
                     <option key={p} value={p}>
                       {ETIQUETAS_PLATAFORMA[p]}
@@ -162,7 +178,11 @@ export function FormularioVideojuego() {
                       onChange={(e) => cambiarLogro(i, { nombre: e.target.value })}
                     />
                     <label className="casilla">
-                      <input type="checkbox" checked={logro.obtenido} onChange={(e) => cambiarLogro(i, { obtenido: e.target.checked })} />
+                      <input
+                        type="checkbox"
+                        checked={logro.obtenido}
+                        onChange={(e) => cambiarLogro(i, { obtenido: e.target.checked })}
+                      />
                       Obtenido
                     </label>
                     <button type="button" className="boton-texto" onClick={() => quitarLogro(i)}>
