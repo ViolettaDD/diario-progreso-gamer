@@ -174,6 +174,7 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
 
 - La spec del ticket está en `docs/specs/` y se commiteó antes que el código.
 - `npm run check` pasa en las carpetas tocadas, y `npm test` pasa en el backend (desde T-01).
+- Excepción: en los tickets de tipo test, `npm run check` y `npm test` fallan a propósito (estado rojo) porque falta la implementación; el ticket de código que sigue los pone en verde.
 - El commit tiene la forma `<tipo>(E2): T-xx descripción` y solo contiene los archivos del ticket.
 - Los tickets de deuda llevan la marca en su commit: `(deuda P2)` en T-02, T-03, T-04 y T-23, y `(deuda P5)` en T-05 y T-06. Por ejemplo, `test(E2): T-02 tests de fecha de calendario (deuda P2)`.
 - Duración máxima de media jornada.
