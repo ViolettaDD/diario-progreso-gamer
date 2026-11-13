@@ -10,7 +10,9 @@ Comprobaciones, en orden. Si alguna falla, detente, explica por qué y no hagas 
 
 1. `git branch --show-current` debe ser `feature/e2-metas-rachas`.
 2. `git status --short` y `git diff --cached --name-only`: identifica los archivos del ticket. Agrega cada archivo por su ruta con `git add <ruta>`. Nunca uses `git add -A` ni `git add .`, y nunca agregues archivos `.env` (solo `.env.example`).
-3. Ejecuta `npm run check` en las carpetas cambiadas (backend y/o frontend). Si `backend/package.json` tiene el script `test`, ejecuta también `npm test` en backend.
+3. Checks según el tipo de ticket (la columna «Tipo» del backlog `docs/backlog/E2-metas-y-rachas.md`):
+   - **Tickets de tipo test** (estado rojo esperado): ejecuta `npm test` en backend y comprueba que falla **solo** porque falta el módulo o la función que implementa el ticket de código siguiente. Cita el mensaje de error (por ejemplo `Failed to resolve import "./racha"` o `... is not a function`). Si falla por sintaxis, por un test mal escrito o por cualquier otra causa, detente. `npm run check` también falla por el módulo que falta; no lo exijas en verde. El mensaje de commit lleva tipo `test` y termina en ` (rojo: falta T-xx)`, donde T-xx es el ticket de código que lo pone en verde.
+   - **Resto de tickets**: ejecuta `npm run check` en las carpetas cambiadas (backend y/o frontend). Si `backend/package.json` tiene el script `test`, ejecuta también `npm test` en backend. Todo debe pasar en verde.
 4. Trazabilidad: si el commit toca `backend/src/` o `frontend/src/` (implementación), la spec del ticket debe estar ya commiteada en un commit anterior (`git log --oneline -- docs/specs/`). Si no lo está, o si la spec va en el mismo conjunto de cambios, detente: la spec va en su propio commit antes del código.
 5. Mensaje: `<tipo>(E2): T-XX descripción`, con tipo `feat`, `fix`, `test`, `docs` o `chore`. Debe nombrar el ticket.
 

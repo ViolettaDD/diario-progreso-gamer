@@ -31,6 +31,7 @@ en la rama feature/e2-metas-rachas. Producto, reglas y decisiones: docs/ (diagno
 - NUNCA leas ni modifiques archivos .env (solo .env.example). Un hook lo bloquea.
 - Ninguna funcionalidad sin una spec en docs/specs/. Sin spec, propón escribirla; no programes.
 - Ejecuta los tests (npm test y npm run check) antes de dar una tarea por terminada.
+- En tickets de tipo test el estado esperado es rojo: falla por falta de implementación, nunca por error de sintaxis.
 - Semana, racha, hitos y resumen son funciones puras en backend/src/dominio/: sin Mongoose y sin
   leer la hora internamente («hoy» entra por parámetro).
 - Zona horaria: America/Guayaquil. La fecha de una Partida es un día de calendario, guardado a medianoche UTC.
