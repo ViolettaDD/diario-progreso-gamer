@@ -36,8 +36,8 @@ Es la misma persona que ya registra sus videojuegos y partidas en el Diario. Hay
 
 **Métrica de éxito:** en un mes, la persona **cumple su meta semanal al menos 3 de 4 semanas**.
 
-- **Semana cumplida:** en esa semana se alcanzan **las dos cosas**: las horas de la meta y los días de la meta. Ejemplo: con una meta de 5 h y 4 días, jugar 6 h repartidas solo en sábado y domingo **no** cumple la semana, porque faltan días. Lo que se busca es la constancia.
-- **Mes:** 4 semanas completas y consecutivas, de lunes a domingo, contadas desde la primera semana completa en la que el juego tiene una meta activa.
+- **Semana cumplida:** una semana se cumple solo si se alcanzan **las dos cosas**: las horas objetivo **y** los días objetivo de la meta. Alcanzar solo una no basta. Ejemplo: con una meta de 5 h y 4 días, jugar 6 h repartidas solo en sábado y domingo **no** cumple la semana, porque faltan 2 días. Lo que se busca es la constancia.
+- **Mes:** 4 semanas **completas** y consecutivas, cada una de lunes a domingo. La primera es la semana en que se crea la meta, que cuenta completa con las partidas que ya tenía (RN-14).
 
 Esta métrica no se puede medir dentro de la aplicación en E2. Ver el punto abierto PA-01.
 
@@ -45,16 +45,17 @@ Esta métrica no se puede medir dentro de la aplicación en E2. Ver el punto abi
 
 E2 incluye:
 
-1. **Meta por videojuego.** Crearla con horas por semana, días por semana y hasta 5 hitos de avance. También editarla, desactivarla y reactivarla.
+1. **Meta por videojuego.** Crearla con horas por semana, días por semana y hasta 5 hitos de avance. También editarla, desactivarla y reactivarla. Las metas no se borran: las inactivas quedan como historial del juego (RN-16).
 2. **Progreso de la semana actual** en el detalle del juego:
    - horas jugadas;
    - días jugados frente a los días de la meta;
    - porcentaje de horas respecto de la meta.
-3. **Racha actual y mejor racha** del juego.
-4. **Hitos de la meta**, cada uno con su estado: alcanzado o pendiente.
-5. **Eliminación completa:** al eliminar un juego se eliminan también sus metas, además de sus partidas.
-6. **Reglas de fecha más estrictas para las partidas:** no se aceptan partidas con fecha futura.
-7. **Corregir una partida ya registrada** desde la aplicación. Es el último elemento de la épica y se puede recortar si falta tiempo. Se incluye porque corregir una partida mal cargada, en vez de borrarla y crearla de nuevo, evita deshacer una racha o un hito.
+3. **Racha actual y mejor racha** del juego, sobre todo su historial de partidas.
+4. **Hitos de la meta activa**, cada uno con su estado: alcanzado o pendiente.
+5. **Aviso en juegos terminados:** en un juego «completado» o «abandonado» que conserva su meta activa, un aviso de que la meta sigue activa hasta que se desactive (RN-19).
+6. **Eliminación completa:** al eliminar un juego se eliminan también sus metas, además de sus partidas.
+7. **Reglas de fecha más estrictas para las partidas:** no se aceptan partidas con fecha futura.
+8. **Corregir una partida ya registrada** desde la aplicación. Es el último elemento de la épica y se puede recortar si falta tiempo. Se incluye porque corregir una partida mal cargada, en vez de borrarla y crearla de nuevo, evita deshacer una racha o un hito.
 
 ## 6. No-alcance
 
@@ -64,6 +65,8 @@ E2 incluye:
 - Gráficos históricos y, en general, consultar semanas pasadas: solo se ve la semana actual.
 - Varias personas usuarias o cuentas.
 - Guardar qué meta regía en cada semana (RN-04).
+- Borrar una meta (RN-16).
+- Limitar las horas que se pueden registrar en un mismo día (RN-18).
 
 ---
 
@@ -97,9 +100,9 @@ Los ejemplos usan fechas de noviembre de 2026. La semana actual va del **lunes 9
 
 ### RN-05 · Meta superada
 
-> El porcentaje de la semana se limita a 100 %. Las horas reales se muestran siempre.
+> Meta superada: el porcentaje de horas de la semana se limita a 100 %. Las horas reales se muestran siempre (ejemplo: 7 h con meta de 5 h muestra 100 % y «7 h de 5 h»).
 
-**Ejemplo:** con una meta de 5 h y **7 h** jugadas, el porcentaje es **100 %** y se muestran las 7 h.
+**Ejemplo:** con una meta de 5 h y **7 h** jugadas, se muestra **100 %** y **«7 h de 5 h»**. Con 4 h jugadas se mostraría 80 % y «4 h de 5 h».
 
 ### RN-06 · Hitos con el avance actual
 
@@ -166,6 +169,53 @@ Los ejemplos usan fechas de noviembre de 2026. La semana actual va del **lunes 9
 - **Días por semana:** 0 y 8 días se rechazan; 1 y 7 se aceptan.
 - **Hitos:** un sexto hito se rechaza, igual que un objetivo de 0 % o de 101 %. Dos hitos con objetivo del 50 % se aceptan.
 
+### RN-14 · Semana en que se crea la meta
+
+> La semana en que se crea una meta cuenta completa para la métrica, con las partidas que ya existían en esa semana.
+
+**Ejemplo:** el viernes 13 se crea una meta de 5 h y 3 días. Esa semana ya había partidas el lunes 9 (2 h) y el miércoles 11 (1,5 h), y el sábado 14 juega 2 h más. La semana del 9 al 15 suma **5,5 h en 3 días**: está **cumplida** y es la **primera de las 4 semanas** del mes de la métrica.
+
+### RN-15 · Hitos sin meta activa
+
+> Sin meta activa no se muestran hitos.
+
+**Ejemplo:** la meta tenía dos hitos, «Llegar al 25 %» (alcanzado) y «Llegar al 50 %» (pendiente), y el avance actual es 30 %. Al desactivarla, el detalle sigue mostrando las horas, los días y la racha, pero **ningún hito**. Si se reactiva, vuelven los 2 hitos, calculados con el avance de ese momento.
+
+### RN-16 · Las metas no se borran
+
+> Las metas no se borran: solo se desactivan, y quedan como historial del videojuego.
+
+**Ejemplo:** en octubre el juego tuvo una meta de 5 h, que se desactivó, y hoy tiene una meta activa de 8 h. El juego conserva **2 metas**: 1 activa y 1 inactiva. La de 5 h no se puede borrar. Solo desaparece si se elimina el juego entero (RN-08).
+
+### RN-17 · Texto de un hito
+
+> El texto de un hito es obligatorio, de 1 a 60 caracteres, sin espacios al inicio ni al final.
+
+**Ejemplo:**
+
+- Un hito sin texto, o con solo espacios, se rechaza.
+- «Llegar al 50 %» (14 caracteres) se acepta.
+- Un texto de 60 caracteres se acepta y uno de 61 se rechaza.
+- «␣␣Llegar al 50 %␣» queda como «Llegar al 50 %»: se quitan los espacios del inicio y del final, y el largo se cuenta sin ellos.
+
+### RN-18 · Más de 24 horas en un día
+
+> Si en un día se registran partidas que suman más de 24 horas, se aceptan y se cuentan tal cual. Queda como limitación conocida.
+
+**Ejemplo:** el martes 10 se registran dos partidas, de 24 h (el máximo de una partida) y de 10 h. Las dos se aceptan: el martes suma **34 h** y cuenta como **1 día jugado**. Con una meta de 10 h, la semana muestra **100 %** y «34 h de 10 h».
+
+### RN-19 · Juego terminado con meta activa
+
+> Un videojuego completado o abandonado con meta activa muestra su progreso normalmente, con un aviso de que la meta sigue activa hasta que se desactive.
+
+**Ejemplo:** un juego con una meta activa de 6 h y 3 días pasa a «completado». Esta semana lleva 2 h en 1 día. El detalle muestra **«2 h de 6 h»**, **33 %**, **1 de 3 días**, la racha y los hitos igual que antes, junto con un aviso de que la meta sigue activa hasta que la persona la desactive.
+
+### RN-20 · Racha sobre todo el historial
+
+> La racha actual y la mejor racha se calculan sobre todo el historial de partidas del juego.
+
+**Ejemplo:** el juego tuvo una racha de 12 días, del 1 al 12 de septiembre. La meta se creó el lunes 9 de noviembre, y hay partidas el domingo 8, el lunes 9, el martes 10, el miércoles 11, el jueves 12 y hoy viernes 13. La racha actual es **6**: cuenta también el domingo 8, anterior a la meta. La mejor racha es **12**, la de septiembre. La mejor racha nunca es menor que la actual.
+
 ---
 
 ## 8. Supuestos
@@ -177,8 +227,6 @@ Son puntos que no están en la ficha ni en las reglas. Se dan por buenos salvo q
 3. **Horas con fracción.** Las horas por semana de la meta admiten fracciones, por ejemplo 2,5 h.
 4. **Metas sin hitos.** Una meta puede tener entre 0 y 5 hitos: la ficha habla de una «lista corta» y no exige un mínimo.
 5. **Fechas inexistentes.** Una fecha que no existe, como el 30 de febrero, se rechaza igual que una fecha mal escrita.
-6. **Partidas anteriores a la meta.** Cuentan para la semana y para la racha. La racha no depende de la meta (RN-12): si la meta se crea el jueves 12, las partidas del lunes 9 también cuentan.
-7. **Mejor racha.** Es la racha más larga de todo el historial del juego hasta hoy, no solo desde que existe la meta. Nunca es menor que la racha actual.
 
 ## 9. Puntos abiertos
 
@@ -188,52 +236,25 @@ Son puntos que no están en la ficha ni en las reglas. Se dan por buenos salvo q
 - **Justificación:**
   - Medirlo exige revisar semanas pasadas, y los gráficos históricos están fuera del alcance. E2 solo muestra la semana actual.
   - Por RN-04 no se guarda qué meta regía en cada semana, así que una semana pasada no se puede evaluar con la meta que tenía entonces.
-- **Mientras tanto:** la métrica se mide **fuera de la aplicación**. Se revisan a mano las partidas de las 4 semanas contra la meta, con la definición de «semana cumplida» de la sección 4.
+- **Mientras tanto:** la métrica se mide **fuera de la aplicación**. Se revisan a mano las partidas de las 4 semanas contra la meta, con las definiciones de «semana cumplida» y «mes» de la sección 4.
 - **Si se quiere automatizar:** corresponde a una épica futura de historial, que tendría que guardar la meta de cada semana.
 
-### PA-02 · Meta creada a mitad de semana
-
-- **Situación:** RN-04 resuelve el cálculo, porque se usa toda la semana con la meta actual. Pero si la meta se crea el viernes 13 con 4 días, quedan solo 3 días para cumplirla, salvo que ya haya jugado antes en la semana.
-- **Propuesta:** que esa primera semana no cuente para la métrica de éxito. Coincide con la definición de «mes», que empieza en la primera semana completa con meta activa.
-
-### PA-03 · Hitos de una meta desactivada
-
-- **Situación:** al desactivar la meta, sus hitos dejan de verse en el detalle del juego, porque solo se muestran los de la meta activa. La ficha pide ver «qué hitos ha alcanzado».
-- **Por confirmar:** si es aceptable que los hitos alcanzados de una meta desactivada dejen de mostrarse.
-
-### PA-04 · Las metas no se eliminan, solo se desactivan
-
-- **Situación:** las metas inactivas se conservan como historial del juego. Una meta creada por error queda en ese historial hasta que se elimine el juego.
-- **Por confirmar:** si basta con desactivar o si hace falta poder eliminar una meta.
-
-### PA-05 · Texto de un hito
-
-- **Situación:** la ficha da un ejemplo («Llegar al 50 %») pero no dice si el texto es obligatorio ni cuál es su largo máximo.
-- **Propuesta:** obligatorio y de hasta 100 caracteres, el mismo largo que el nombre de un juego o de un logro en E1.
-
-### PA-06 · Un día puede sumar más de 24 horas
-
-- **Situación:** cada partida dura como máximo 24 h, pero nada impide registrar dos partidas de 24 h el mismo día. Las horas de la semana se inflarían.
-- **Propuesta:** diferirlo. Viene de E1, es improbable con una sola persona usuaria y no cambia ninguna regla de E2.
-
-### PA-07 · Progreso de un juego terminado con meta activa
-
-- **Situación:** por RN-07, un juego «completado» o «abandonado» puede conservar su meta activa.
-- **Por confirmar:** si en ese caso el progreso semanal se sigue mostrando igual que en un juego «jugando», que es lo que se asume, o si conviene un aviso que sugiera desactivar la meta.
+Los puntos abiertos PA-02 a PA-07 de la versión anterior quedaron resueltos con las reglas RN-14 a RN-19.
 
 ---
 
 ## 10. Glosario
 
-| Término                     | Significado                                                                                                                                              |
-| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Semana**                  | De lunes a domingo, en hora de Ecuador (RN-11). Solo se muestra la semana actual.                                                                        |
-| **Día jugado**              | Un día de calendario con al menos una partida del juego, sin importar cuántas (RN-02). Una partida pertenece al día en que se registró (RN-03).          |
-| **Racha**                   | Cantidad de días jugados seguidos, hasta hoy o hasta ayer si hoy todavía no hay partida. Se rompe con un día completo sin jugar (RN-01).                 |
-| **Mejor racha**             | La racha más larga del historial del juego hasta hoy.                                                                                                    |
-| **Meta**                    | Lo que la persona se propone jugar en un juego cada semana: horas por semana, días por semana y hasta 5 hitos (RN-13).                                   |
-| **Meta activa**             | La única meta vigente de un juego, la que se usa para calcular la semana (RN-04, RN-09). Las demás quedan inactivas como historial.                      |
-| **Hito**                    | Un objetivo de avance del juego dentro de una meta, por ejemplo «Llegar al 50 %». Está alcanzado mientras el avance actual llegue a su objetivo (RN-06). |
-| **Avance del juego**        | El porcentaje de avance de la partida más reciente, el mismo del resumen de E1. Es lo que se compara con los hitos.                                      |
-| **Porcentaje de la semana** | Horas jugadas en la semana respecto de las horas de la meta, con un máximo de 100 % (RN-05). No tiene relación con el avance del juego.                  |
-| **Semana cumplida**         | Semana en la que se alcanzan las horas **y** los días de la meta. Es la base de la métrica de éxito.                                                     |
+| Término                              | Significado                                                                                                                                                                                       |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Semana**                           | De lunes a domingo, en hora de Ecuador (RN-11). Solo se muestra la semana actual.                                                                                                                 |
+| **Día jugado**                       | Un día de calendario con al menos una partida del juego, sin importar cuántas ni cuántas horas sumen (RN-02, RN-18). Una partida pertenece al día en que se registró (RN-03).                     |
+| **Racha**                            | Cantidad de días jugados seguidos, hasta hoy o hasta ayer si hoy todavía no hay partida. Se rompe con un día completo sin jugar (RN-01). Se calcula sobre todo el historial del juego (RN-20).    |
+| **Mejor racha**                      | La racha más larga de todo el historial del juego hasta hoy (RN-20).                                                                                                                              |
+| **Meta**                             | Lo que la persona se propone jugar en un juego cada semana: horas por semana, días por semana y hasta 5 hitos (RN-13). No se borra, solo se desactiva (RN-16).                                    |
+| **Meta activa**                      | La única meta vigente de un juego, la que se usa para calcular la semana (RN-04, RN-09). Las demás quedan inactivas como historial.                                                               |
+| **Hito**                             | Un objetivo de avance del juego dentro de una meta, por ejemplo «Llegar al 50 %». Está alcanzado mientras el avance actual llegue a su objetivo (RN-06). Solo se muestra con meta activa (RN-15). |
+| **Avance del juego**                 | El porcentaje de avance de la partida más reciente, el mismo del resumen de E1. Es lo que se compara con los hitos.                                                                               |
+| **Porcentaje de horas de la semana** | Horas jugadas en la semana respecto de las horas de la meta, con un máximo de 100 % (RN-05). No tiene relación con el avance del juego.                                                           |
+| **Semana cumplida**                  | Semana en la que se alcanzan las horas objetivo **y** los días objetivo de la meta. Es la base de la métrica de éxito.                                                                            |
+| **Mes (para la métrica)**            | 4 semanas completas y consecutivas de lunes a domingo, empezando por la semana en que se crea la meta (RN-14).                                                                                    |

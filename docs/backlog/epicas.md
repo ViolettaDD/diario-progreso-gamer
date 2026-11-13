@@ -38,11 +38,12 @@
 
 **Alcance:**
 
-- Meta por videojuego, con horas por semana, días por semana y hasta 5 hitos de avance. Se puede crear, editar, desactivar y reactivar.
+- Meta por videojuego, con horas por semana, días por semana y hasta 5 hitos de avance. Se puede crear, editar, desactivar y reactivar. No se borra: las inactivas quedan como historial.
 - Como máximo una meta activa por juego, y solo en juegos «jugando» o «pausado».
-- Progreso de la semana actual, de lunes a domingo en hora de Ecuador: horas, días jugados y porcentaje respecto de la meta.
-- Racha actual y mejor racha del juego.
-- Hitos con su estado, alcanzado o pendiente, calculado con el avance actual.
+- Progreso de la semana actual, de lunes a domingo en hora de Ecuador: horas, días jugados y porcentaje de horas respecto de la meta, con un máximo de 100 %.
+- Racha actual y mejor racha, calculadas sobre todo el historial de partidas del juego.
+- Hitos de la meta activa con su estado, alcanzado o pendiente, calculado con el avance actual.
+- Aviso en juegos completados o abandonados que conservan su meta activa.
 - Eliminar un juego elimina también sus metas.
 - No se aceptan partidas con fecha futura.
 - Corregir una partida desde la aplicación: es el último elemento y se puede recortar.
@@ -54,5 +55,7 @@
 - Rankings.
 - Gráficos históricos y consulta de semanas pasadas.
 - Varias personas usuarias o cuentas.
+- Borrar metas.
+- Limitar las horas que se pueden registrar en un mismo día.
 
-**Detalle:** reglas de negocio RN-01 a RN-13, supuestos, puntos abiertos y glosario en el PRD de E2.
+**Detalle:** reglas de negocio RN-01 a RN-20, supuestos, puntos abiertos y glosario en el PRD de E2.
