@@ -45,7 +45,7 @@ Esta métrica no se puede medir dentro de la aplicación en E2. Ver el punto abi
 
 E2 incluye:
 
-1. **Meta por videojuego.** Crearla con horas por semana, días por semana y hasta 5 hitos de avance. También editarla, desactivarla y reactivarla. Las metas no se borran: las inactivas quedan como historial del juego (RN-16).
+1. **Meta por videojuego.** Crearla con horas por semana, días por semana y hasta 5 hitos de avance. También editarla, desactivarla y reactivarla. Las metas no se borran: las inactivas quedan como historial del juego (RN-16). El detalle del juego muestra la lista de metas inactivas (horas, días y fecha de creación), cada una con la opción de reactivarla.
 2. **Progreso de la semana actual** en el detalle del juego:
    - horas jugadas;
    - días jugados frente a los días de la meta;
