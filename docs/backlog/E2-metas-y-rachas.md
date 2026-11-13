@@ -209,7 +209,7 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
 | T-26 | frontend | Hitos y aviso de juego terminado                               | H-05, H-07        | T-25                   |
 | T-27 | frontend | Formulario de crear y editar meta                              | H-01, H-06        | T-24                   |
 | T-28 | frontend | Desactivar, reactivar e historial de metas                     | H-06              | T-25, T-27             |
-| T-29 | frontend | La confirmación de borrar un juego menciona las metas          | H-08              | T-21                   |
+| T-29 | frontend | La confirmación de borrar un juego menciona las metas          | H-08              | T-21, T-28             |
 | T-30 | frontend | Editar una partida (recortable)                                | H-09              | T-04, T-23             |
 | T-31 | docs     | Desplegar en Render, verificar E2 y abrir el pull request      | todas             | T-22 a T-30            |
 
@@ -330,7 +330,7 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
 ### T-15 · test · Tests del modelo Meta y del error de conflicto
 
 - **Descripción:**
-  - `backend/src/modelos/Meta.test.ts` con `validateSync` y estos casos:
+  - `backend/src/modelos/Meta.model.test.ts` con `validateSync` y estos casos:
     - límites de RN-13: horas de 0, 0,5, 100 y 100,5; días de 0, 1, 7 y 8, y que sean enteros; 6 hitos; objetivos de 0, 1, 100 y 101; objetivos repetidos;
     - casos de RN-17: vacío, solo espacios, 60 y 61 caracteres, recorte de espacios.
   - `backend/src/middlewares/errorHandler.test.ts` con `req` y `res` simulados:
@@ -493,6 +493,7 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
 
 ### T-29 · frontend · La confirmación de borrar un juego menciona las metas
 
+- **Depende de:** T-21 y T-28. Necesita la lista de metas de T-28 para contar «sus N meta(s)».
 - **Descripción:** el texto de confirmación pasa a nombrar el juego y a avisar que se borrarán también sus metas y sus partidas.
 - **DoD:** revisión visual de H-08.2. H-08.1 se comprueba de punta a punta con T-21.
 
@@ -523,17 +524,17 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
 
 ## 4. Deuda técnica diferida
 
-| Id  | Qué                                                                                                                             | Motivo para diferirlo                                                                                                                 |
-| --- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| P4b | Transacción en la eliminación en cascada                                                                                        | El orden metas → partidas → videojuego ya evita huérfanos. Si algo falla, el juego sigue existiendo y el borrado se puede reintentar. |
-| P6  | Reemplazar los 75 colores literales del CSS por variables y quitar las 9 variables sin uso                                      | El código nuevo ya usa solo variables. Limpiar lo existente no aporta a E2.                                                           |
-| P13 | Contraste AA en las pantallas existentes (`.volver`, `.boton-texto`, `dt` y `.nota` del resumen) y en el botón primario (3.4:1) | E2 no toca esas pantallas. La sección nueva cumple AA y usa `.boton-secundario`.                                                      |
-| P14 | CSS sobrante (bordes invisibles, `.logo-fuente`)                                                                                | Es cosmético. Se limpia junto con P6.                                                                                                 |
-| P15 | Carrera entre comprobar que el juego existe y guardar la partida                                                                | La ventana es mínima con una sola persona usuaria, y cerrarla requiere una transacción (mismo motivo que P4b).                        |
-| P16 | Exigir minutos enteros en la duración                                                                                           | Un decimal no rompe ninguna fórmula de E2.                                                                                            |
-| P17 | La configuración se lee dos veces                                                                                               | Es inofensivo, y los tests de E2 no se conectan a la base.                                                                            |
-| P18 | Paginación de la lista general de partidas                                                                                      | El volumen es pequeño, y E2 consulta por videojuego.                                                                                  |
-| P8  | Editar partidas (solo si T-30 no entra)                                                                                         | Es recortable por decisión del diagnóstico §5.11.                                                                                     |
+| Id  | Qué                                                                                                                                                      | Motivo para diferirlo                                                                                                                 |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| P4b | Transacción en la eliminación en cascada                                                                                                                 | El orden metas → partidas → videojuego ya evita huérfanos. Si algo falla, el juego sigue existiendo y el borrado se puede reintentar. |
+| P6  | Reemplazar los 75 colores literales del CSS por variables y quitar las 9 variables sin uso, y la variable --tinta-oscura, creada en E2 sin uso por ahora | El código nuevo ya usa solo variables. Limpiar lo existente no aporta a E2.                                                           |
+| P13 | Contraste AA en las pantallas existentes (`.volver`, `.boton-texto`, `dt` y `.nota` del resumen) y en el botón primario (3.4:1)                          | E2 no toca esas pantallas. La sección nueva cumple AA y usa `.boton-secundario`.                                                      |
+| P14 | CSS sobrante (bordes invisibles, `.logo-fuente`)                                                                                                         | Es cosmético. Se limpia junto con P6.                                                                                                 |
+| P15 | Carrera entre comprobar que el juego existe y guardar la partida                                                                                         | La ventana es mínima con una sola persona usuaria, y cerrarla requiere una transacción (mismo motivo que P4b).                        |
+| P16 | Exigir minutos enteros en la duración                                                                                                                    | Un decimal no rompe ninguna fórmula de E2.                                                                                            |
+| P17 | La configuración se lee dos veces                                                                                                                        | Es inofensivo, y los tests de E2 no se conectan a la base.                                                                            |
+| P18 | Paginación de la lista general de partidas                                                                                                               | El volumen es pequeño, y E2 consulta por videojuego.                                                                                  |
+| P8  | Editar partidas (solo si T-30 no entra)                                                                                                                  | Es recortable por decisión del diagnóstico §5.11.                                                                                     |
 
 ---
 

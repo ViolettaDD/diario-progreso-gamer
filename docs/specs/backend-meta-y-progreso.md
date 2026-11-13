@@ -116,7 +116,7 @@ Esta spec cubre el backend de la épica E2 «Metas y rachas».
 
 1. Obtener el día de una partida guardada con `timeZone`, `toLocale…`, `getDate()` o `getDay()`. Solo se permite `fecha.toISOString().slice(0, 10)`.
 2. Llamar a `new Date()` sin argumentos ni a `Date.now()` dentro de `backend/src/dominio/`.
-3. Importar Mongoose en `backend/src/dominio/`.
+3. Importar Mongoose en `backend/src/dominio/`, ni importar nada de `backend/src/modelos/` (los modelos importan Mongoose). `meta.ts` define su propia lista de estados.
 4. Guardar en la base `alcanzado`, rachas, progreso semanal o resumen.
 5. Desactivar en silencio la meta activa anterior al crear o reactivar otra.
 6. Exponer una ruta para borrar metas. `DELETE /api/metas/:id` responde el 404 de «ruta no encontrada» (RN-16).
@@ -240,9 +240,10 @@ Las rutas son relativas a `backend/`, salvo el README.
    - RN-09: «Este juego ya tiene una meta activa. Edítala o desactívala antes de crear otra».
    - RN-07: «Solo los juegos en estado jugando o pausado pueden tener una meta activa».
 9. **Dos configuraciones de TypeScript.** `npm run check` sigue con `tsc --noEmit` sobre `tsconfig.json`, así que también revisa los tests. `npm run build` usa `tsconfig.build.json`, que excluye los tests de `dist/`.
-10. **Test de humo.** El de T-01 queda en el repositorio.
+10. **Test de humo.** El de T-01 queda en el repositorio y no se borra al cerrar la épica.
+11. **Qué es reactivar.** «Reactivar» es cambiar `activa` de `false` a `true`. Un `PUT` con `activa: true` sobre una meta que ya está activa no es reactivar y no dispara RN-07 ni RN-09. Al contar «otra meta activa» se excluye la propia meta.
+12. **Metas creadas inactivas.** Crear una meta con `activa: false` no aplica RN-07 ni RN-09, porque las dos reglas hablan de metas activas.
 
 **Puntos abiertos.**
 
-1. Si el test de humo se borra al cerrar la épica.
-2. El cambio de `build` en `package.json` afecta a Render, porque su comando es `npm run build`. Hay que confirmar que el build sigue funcionando allí en T-31.
+1. El cambio de `build` en `package.json` afecta a Render, porque su comando es `npm run build`. Hay que confirmar que el build sigue funcionando allí en T-31.
