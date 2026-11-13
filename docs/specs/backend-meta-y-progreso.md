@@ -16,11 +16,13 @@ Esta spec cubre el backend de la épica E2 «Metas y rachas».
 - **Deudas con ciclo completo:** D-P2 (la fecha de una partida es un día de calendario y no puede ser futura) y D-P5 (el resumen pasa a ser una función pura).
 - **Tickets:** T-01 a T-22.
 
-**No cubre** la interfaz, que es de los tickets T-23 a T-31 y de la spec de frontend:
+**No cubre:**
 
-- los criterios de pantalla H-02.9, H-02.10, H-07.3, H-08.2 y D-P2.5;
-- el aviso visual de H-07.2;
-- la historia H-09, que es la recortable P8.
+- **La interfaz** (tickets T-23 a T-30). Va en `docs/specs/frontend-progreso-y-formulario-de-meta.md`, que incluye:
+  - los criterios de pantalla H-02.9, H-02.10, H-07.3, H-08.2 y D-P2.5, que en la tabla de abajo remiten a su revisión visual;
+  - el aviso visual de H-07.2;
+  - la historia H-09, que es la recortable P8.
+- **El despliegue** (T-31), que no necesita spec.
 
 ## Reglas
 
@@ -28,6 +30,8 @@ Esta spec cubre el backend de la épica E2 «Metas y rachas».
 
 1. **Capas y dominio**
    - Las capas son rutas → controladores → servicios → modelos.
+   - Los archivos de `controllers/` no importan nada de `modelos/`.
+   - Los archivos de `services/` no importan `express`.
    - Los cálculos de semana, progreso, racha, hitos, resumen, fechas y estados que admiten meta viven en `backend/src/dominio/` como funciones puras.
    - «Hoy» llega a esas funciones por parámetro, como texto `AAAA-MM-DD`.
 2. **Fecha de una partida** (D-P2, RN-03 y RN-10)
@@ -110,17 +114,17 @@ Esta spec cubre el backend de la épica E2 «Metas y rachas».
 
 ### NO DEBE
 
-1. Convertir la fecha guardada de una partida a la hora de Ecuador para saber su día.
+1. Obtener el día de una partida guardada con `timeZone`, `toLocale…`, `getDate()` o `getDay()`. Solo se permite `fecha.toISOString().slice(0, 10)`.
 2. Llamar a `new Date()` sin argumentos ni a `Date.now()` dentro de `backend/src/dominio/`.
 3. Importar Mongoose en `backend/src/dominio/`.
 4. Guardar en la base `alcanzado`, rachas, progreso semanal o resumen.
 5. Desactivar en silencio la meta activa anterior al crear o reactivar otra.
 6. Exponer una ruta para borrar metas. `DELETE /api/metas/:id` responde el 404 de «ruta no encontrada» (RN-16).
 7. Rechazar por el estado del juego la edición de una meta que no se está reactivando. RN-07 solo habla de crear y reactivar.
-8. Usar transacciones de MongoDB, porque P4b está diferido.
+8. Llamar a `startSession` o a `withTransaction`. Las transacciones (P4b) están diferidas.
 9. Instalar supertest, mongodb-memory-server u otra dependencia distinta de Vitest.
 10. Cambiar los nombres, los tipos o los redondeos de la respuesta del resumen.
-11. Tocar deuda diferida: P4b, P6, P13, P14, P15, P16, P17 y P18.
+11. Modificar archivos que no aparezcan en la tabla «Ticket → archivos» de su ticket. Esto incluye no pagar la deuda diferida P4b y P6, ni la de P13 a P18.
 
 ## Criterio → verificación
 
@@ -143,8 +147,8 @@ Todas las rutas de archivo son relativas a `backend/`. «hoy = X» es el valor q
 | H-02.6   | `src/dominio/progreso.test.ts` → «H-02.6: sin meta da 4 h y porcentaje null; con meta de 5 h y sin partidas da 0 h y 0 % (RN-12)»                                                                                                                                                         |
 | H-02.7   | `src/dominio/progreso.test.ts` → «H-02.7: las partidas previas a la meta cuentan: 3,5 h de 5 h y 70 % (RN-14)» · `pruebas.http` → «H-02.7: crear meta con partidas previas y consultar progreso → 70»                                                                                     |
 | H-02.8   | `src/dominio/progreso.test.ts` → «H-02.8: partidas de 24 h y 10 h el mismo día dan 34 h y 100 % con meta de 10 h (RN-18)»                                                                                                                                                                 |
-| H-02.9   | Sin verificación en esta spec (frontend, T-25)                                                                                                                                                                                                                                            |
-| H-02.10  | Sin verificación en esta spec (frontend, T-25)                                                                                                                                                                                                                                            |
+| H-02.9   | Revisión visual definida en `docs/specs/frontend-progreso-y-formulario-de-meta.md`, fila H-02.9 (T-25)                                                                                                                                                                                    |
+| H-02.10  | Revisión visual definida en `docs/specs/frontend-progreso-y-formulario-de-meta.md`, fila H-02.10 (T-25)                                                                                                                                                                                   |
 | H-03.1   | `src/dominio/progreso.test.ts` → «H-03.1: dos partidas el lunes 9 y una el miércoles 11 dan 2 días (RN-02)»                                                                                                                                                                               |
 | H-03.2   | `src/dominio/progreso.test.ts` → «H-03.2: el domingo 15 cuenta como día de la semana del 9 al 15 y el lunes 16 da 0 días (RN-03, RN-11)»                                                                                                                                                  |
 | H-03.3   | `src/dominio/progreso.test.ts` → «H-03.3: sin meta da 3 días; con meta de 4 días y sin partidas da 0 días (RN-12)»                                                                                                                                                                        |
@@ -171,14 +175,14 @@ Todas las rutas de archivo son relativas a `backend/`. «hoy = X» es el valor q
 | H-06.7   | `pruebas.http` → «H-06.7: listar metas del juego → total 2, una activa y una inactiva»                                                                                                                                                                                                    |
 | H-07.1   | `pruebas.http` → «H-07.1: juego a abandonado y obtener su meta → activa true»                                                                                                                                                                                                             |
 | H-07.2   | `src/dominio/progreso.test.ts` → «H-07.2: 2 h en 1 día con meta de 6 h y 3 días dan 33 % y 1 día (RN-19)» · `pruebas.http` → «H-07.2: progreso de juego completado con meta activa → 200 con meta». El aviso visual es del frontend.                                                      |
-| H-07.3   | Sin verificación en esta spec (aviso visual, frontend, T-26). El dato que lo apaga, `meta: null`, lo cubre H-06.3.                                                                                                                                                                        |
+| H-07.3   | Revisión visual definida en `docs/specs/frontend-progreso-y-formulario-de-meta.md`, fila H-07.3 (T-26). El dato que apaga el aviso, `meta: null`, lo cubre H-06.3.                                                                                                                        |
 | H-08.1   | `pruebas.http` → «H-08.1: eliminar juego con 2 metas y 12 partidas → 204», «H-08.1: obtener cada meta del juego eliminado → 404» y «H-08.1: obtener una partida del juego eliminado → 404»                                                                                                |
-| H-08.2   | Sin verificación en esta spec (confirmación en pantalla, frontend, T-29)                                                                                                                                                                                                                  |
+| H-08.2   | Revisión visual definida en `docs/specs/frontend-progreso-y-formulario-de-meta.md`, fila H-08.2 (T-29)                                                                                                                                                                                    |
 | D-P2.1   | `src/dominio/fechas.test.ts` → «D-P2.1: "2026-11-12" es una fecha de calendario válida (RN-03)» · `pruebas.http` → «D-P2.1: registrar partida con la fecha de hoy → 201»                                                                                                                  |
 | D-P2.2   | `src/dominio/fechas.test.ts` → «D-P2.2: rechaza fecha con hora, con zona, texto, vacía y 2026-02-30 (RN-03)» · `pruebas.http` → «D-P2.2: registrar partida con hora → 400 validacion» y «D-P2.2: editar partida con fecha "ayer" → 400 validacion»                                        |
 | D-P2.3   | `src/dominio/fechas.test.ts` → «D-P2.3: a las 21:00 del jueves 12 en Ecuador hoy es el 12, el viernes 13 es futuro y el jueves 12 no (RN-10)» · `pruebas.http` → «D-P2.3: registrar partida con fecha futura → 400 validacion» y «D-P2.3: editar partida a fecha futura → 400 validacion» |
 | D-P2.4   | `src/dominio/fechas.test.ts` → «D-P2.4: a las 23:59 del lunes 9 en Ecuador hoy es 2026-11-09 (RN-11)» · `src/dominio/semana.test.ts` → «D-P2.4: con hoy lunes 9 la semana va del 2026-11-09 al 2026-11-15 (RN-11)»                                                                        |
-| D-P2.5   | Sin verificación en esta spec (frontend, T-23)                                                                                                                                                                                                                                            |
+| D-P2.5   | Revisión visual definida en `docs/specs/frontend-progreso-y-formulario-de-meta.md`, fila D-P2.5 (T-23)                                                                                                                                                                                    |
 | D-P5.1   | `src/dominio/resumen.test.ts` → «D-P5.1: sin partidas da totalPartidas 0, horasTotales 0, ultimaPartida null y avance 0 (RN-12)»                                                                                                                                                          |
 | D-P5.2   | `src/dominio/resumen.test.ts` → «D-P5.2: 870 minutos dan 14,5 h y 100 minutos dan 1,67 h»                                                                                                                                                                                                 |
 | D-P5.3   | `src/dominio/resumen.test.ts` → «D-P5.3: con dos partidas de la misma fecha gana la registrada después: avance 60 (RN-06)»                                                                                                                                                                |
@@ -196,30 +200,30 @@ Todas las rutas de archivo son relativas a `backend/`. «hoy = X» es el valor q
 
 Las rutas son relativas a `backend/`, salvo el README.
 
-| Ticket | Archivos que se crean o modifican                                                                                                                                                                                                                                                  |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| T-01   | `package.json` (Vitest con versión exacta en `devDependencies`, script `"test": "vitest run"`, `build` pasa a `tsc -p tsconfig.build.json`), `package-lock.json`, `tsconfig.build.json` (nuevo: extiende `tsconfig.json` y excluye `src/**/*.test.ts`), `src/dominio/humo.test.ts` |
-| T-02   | `src/dominio/fechas.test.ts`                                                                                                                                                                                                                                                       |
-| T-03   | `src/dominio/fechas.ts`                                                                                                                                                                                                                                                            |
-| T-04   | `src/services/partidas.service.ts`, `pruebas.http`                                                                                                                                                                                                                                 |
-| T-05   | `src/dominio/resumen.test.ts`                                                                                                                                                                                                                                                      |
-| T-06   | `src/dominio/resumen.ts`, `src/services/partidas.service.ts`                                                                                                                                                                                                                       |
-| T-07   | `src/dominio/semana.test.ts`                                                                                                                                                                                                                                                       |
-| T-08   | `src/dominio/semana.ts`                                                                                                                                                                                                                                                            |
-| T-09   | `src/dominio/progreso.test.ts`                                                                                                                                                                                                                                                     |
-| T-10   | `src/dominio/progreso.ts`                                                                                                                                                                                                                                                          |
-| T-11   | `src/dominio/racha.test.ts`                                                                                                                                                                                                                                                        |
-| T-12   | `src/dominio/racha.ts`                                                                                                                                                                                                                                                             |
-| T-13   | `src/dominio/hitos.test.ts`, `src/dominio/meta.test.ts`                                                                                                                                                                                                                            |
-| T-14   | `src/dominio/hitos.ts`, `src/dominio/meta.ts`                                                                                                                                                                                                                                      |
-| T-15   | `src/modelos/Meta.model.test.ts`, `src/middlewares/errorHandler.test.ts`                                                                                                                                                                                                           |
-| T-16   | `src/apiError.ts`, `src/middlewares/errorHandler.ts`                                                                                                                                                                                                                               |
-| T-17   | `src/modelos/Meta.model.ts`                                                                                                                                                                                                                                                        |
-| T-18   | `src/services/metas.service.ts`, `src/controllers/metas.controller.ts`, `src/routes/metas.routes.ts`, `src/app.ts`                                                                                                                                                                 |
-| T-19   | `src/services/metas.service.ts`, `src/controllers/metas.controller.ts`, `src/routes/metas.routes.ts`, `src/routes/videojuegos.routes.ts`, `src/controllers/videojuegos.controller.ts`                                                                                              |
-| T-20   | `src/services/progreso.service.ts`, `src/routes/videojuegos.routes.ts`, `src/controllers/videojuegos.controller.ts`                                                                                                                                                                |
-| T-21   | `src/services/videojuegos.service.ts`                                                                                                                                                                                                                                              |
-| T-22   | `README.md` (raíz del repositorio), `pruebas.http`, `.env.example`                                                                                                                                                                                                                 |
+| Ticket | Archivos que se crean o modifican                                                                                                                                                                                                                                                                          |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| T-01   | **Modificados:** `package.json` (Vitest con versión exacta en `devDependencies`, script `"test": "vitest run"`, `build` pasa a `tsc -p tsconfig.build.json`) y `package-lock.json`. **Nuevos:** `tsconfig.build.json` (extiende `tsconfig.json` y excluye `src/**/*.test.ts`) y `src/dominio/humo.test.ts` |
+| T-02   | **Nuevo:** `src/dominio/fechas.test.ts`                                                                                                                                                                                                                                                                    |
+| T-03   | **Nuevo:** `src/dominio/fechas.ts`                                                                                                                                                                                                                                                                         |
+| T-04   | **Modificados:** `src/services/partidas.service.ts` y `pruebas.http`                                                                                                                                                                                                                                       |
+| T-05   | **Nuevo:** `src/dominio/resumen.test.ts`                                                                                                                                                                                                                                                                   |
+| T-06   | **Nuevo:** `src/dominio/resumen.ts`. **Modificado:** `src/services/partidas.service.ts`                                                                                                                                                                                                                    |
+| T-07   | **Nuevo:** `src/dominio/semana.test.ts`                                                                                                                                                                                                                                                                    |
+| T-08   | **Nuevo:** `src/dominio/semana.ts`                                                                                                                                                                                                                                                                         |
+| T-09   | **Nuevo:** `src/dominio/progreso.test.ts`                                                                                                                                                                                                                                                                  |
+| T-10   | **Nuevo:** `src/dominio/progreso.ts`                                                                                                                                                                                                                                                                       |
+| T-11   | **Nuevo:** `src/dominio/racha.test.ts`                                                                                                                                                                                                                                                                     |
+| T-12   | **Nuevo:** `src/dominio/racha.ts`                                                                                                                                                                                                                                                                          |
+| T-13   | **Nuevos:** `src/dominio/hitos.test.ts` y `src/dominio/meta.test.ts`                                                                                                                                                                                                                                       |
+| T-14   | **Nuevos:** `src/dominio/hitos.ts` y `src/dominio/meta.ts`                                                                                                                                                                                                                                                 |
+| T-15   | **Nuevos:** `src/modelos/Meta.model.test.ts` y `src/middlewares/errorHandler.test.ts`                                                                                                                                                                                                                      |
+| T-16   | **Modificados:** `src/apiError.ts` y `src/middlewares/errorHandler.ts`                                                                                                                                                                                                                                     |
+| T-17   | **Nuevo:** `src/modelos/Meta.model.ts`                                                                                                                                                                                                                                                                     |
+| T-18   | **Nuevos:** `src/services/metas.service.ts`, `src/controllers/metas.controller.ts` y `src/routes/metas.routes.ts`. **Modificado:** `src/app.ts` (monta `/api/metas`)                                                                                                                                       |
+| T-19   | **Modificados:** `src/services/metas.service.ts`, `src/controllers/metas.controller.ts` y `src/routes/metas.routes.ts` (creados en T-18), `src/routes/videojuegos.routes.ts` y `src/controllers/videojuegos.controller.ts`                                                                                 |
+| T-20   | **Nuevo:** `src/services/progreso.service.ts`. **Modificados:** `src/routes/videojuegos.routes.ts` y `src/controllers/videojuegos.controller.ts`                                                                                                                                                           |
+| T-21   | **Modificado:** `src/services/videojuegos.service.ts`                                                                                                                                                                                                                                                      |
+| T-22   | **Modificados:** `README.md` (raíz del repositorio), `pruebas.http` y `.env.example`                                                                                                                                                                                                                       |
 
 ## Supuestos y puntos abiertos
 
