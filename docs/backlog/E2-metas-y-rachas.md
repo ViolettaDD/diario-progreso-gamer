@@ -28,16 +28,18 @@
 
 **Como** persona con una meta semanal, **quiero** ver en el detalle del juego cuántas horas llevo esta semana frente a las horas de mi meta, **para** saber si voy al día antes de que termine la semana.
 
-| #      | Criterio                                                                                                                                                                                                                                                                                  | RN           |
-| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
-| H-02.1 | **DADO** una meta de 5 h y partidas el domingo 8 (3 h), el lunes 9 (2 h) y el miércoles 11 (1,5 h), **CUANDO** abro el detalle el viernes 13, **ENTONCES** veo la semana del 9 al 15 con «3,5 h de 5 h» y 70 %. La del domingo 8 no cuenta, porque es de la semana anterior.              | RN-11        |
-| H-02.2 | **DADO** que hoy es domingo 15 a las 23:00 en Ecuador y registro una partida del domingo 15 de 150 minutos, de 23:00 a 01:30, **CUANDO** miro la semana, **ENTONCES** suma 2,5 h a la semana del 9 al 15. El lunes 16, la semana del 16 al 22 empieza en 0 h.                             | RN-03, RN-11 |
-| H-02.3 | **DADO** una meta de 5 h y 7 h jugadas en la semana, **CUANDO** miro el progreso, **ENTONCES** veo 100 % y «7 h de 5 h».                                                                                                                                                                  | RN-05        |
-| H-02.4 | **DADO** una meta de 8 h con 5 h jugadas (63 %), **CUANDO** el miércoles 11 cambio la meta a 4 h, **ENTONCES** toda la semana se compara con 4 h: veo 100 % y «5 h de 4 h».                                                                                                               | RN-04        |
-| H-02.5 | **DADO** que hoy es miércoles 11, hay una partida el lunes 9 (3 h) y otra guardada antes de la regla con fecha viernes 13 (2 h), **CUANDO** miro la semana, **ENTONCES** veo 3 h: la partida con fecha futura no suma.                                                                    | RN-10        |
-| H-02.6 | **DADO** un juego **sin meta activa** con partidas el lunes 9 (1 h), el jueves 12 (1,5 h) y el viernes 13 (1,5 h), **CUANDO** miro la semana, **ENTONCES** veo 4 h sin porcentaje ni «de N h». **DADO** un juego con meta de 5 h y **sin partidas**, **ENTONCES** veo «0 h de 5 h» y 0 %. | RN-12        |
-| H-02.7 | **DADO** partidas el lunes 9 (2 h) y el miércoles 11 (1,5 h), **CUANDO** el viernes 13 creo una meta de 5 h, **ENTONCES** la semana muestra «3,5 h de 5 h» y 70 % desde el primer momento.                                                                                                | RN-14        |
-| H-02.8 | **DADO** una meta de 10 h, **CUANDO** el martes 10 registro dos partidas de 24 h y de 10 h, **ENTONCES** las dos se aceptan y veo 100 % y «34 h de 10 h».                                                                                                                                 | RN-18        |
+| #       | Criterio                                                                                                                                                                                                                                                                                       | RN           |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| H-02.1  | **DADO** una meta de 5 h y partidas el domingo 8 (3 h), el lunes 9 (2 h) y el miércoles 11 (1,5 h), **CUANDO** abro el detalle el viernes 13, **ENTONCES** veo la semana del 9 al 15 con «3,5 h de 5 h» y 70 %. La del domingo 8 no cuenta, porque es de la semana anterior.                   | RN-11        |
+| H-02.2  | **DADO** que hoy es domingo 15 a las 23:00 en Ecuador y registro una partida del domingo 15 de 150 minutos, de 23:00 a 01:30, **CUANDO** miro la semana, **ENTONCES** suma 2,5 h a la semana del 9 al 15. El lunes 16, la semana del 16 al 22 empieza en 0 h.                                  | RN-03, RN-11 |
+| H-02.3  | **DADO** una meta de 5 h y 7 h jugadas en la semana, **CUANDO** miro el progreso, **ENTONCES** veo 100 % y «7 h de 5 h».                                                                                                                                                                       | RN-05        |
+| H-02.4  | **DADO** una meta de 8 h con 5 h jugadas (63 %), **CUANDO** el miércoles 11 cambio la meta a 4 h, **ENTONCES** toda la semana se compara con 4 h: veo 100 % y «5 h de 4 h».                                                                                                                    | RN-04        |
+| H-02.5  | **DADO** que hoy es miércoles 11, hay una partida el lunes 9 (3 h) y otra guardada antes de la regla con fecha viernes 13 (2 h), **CUANDO** miro la semana, **ENTONCES** veo 3 h: la partida con fecha futura no suma.                                                                         | RN-10        |
+| H-02.6  | **DADO** un juego **sin meta activa** con partidas el lunes 9 (1 h), el jueves 12 (1,5 h) y el viernes 13 (1,5 h), **CUANDO** miro la semana, **ENTONCES** veo 4 h sin porcentaje ni «de N h». **DADO** un juego con meta de 5 h y **sin partidas**, **ENTONCES** veo «0 h de 5 h» y 0 %.      | RN-12        |
+| H-02.7  | **DADO** partidas el lunes 9 (2 h) y el miércoles 11 (1,5 h), **CUANDO** el viernes 13 creo una meta de 5 h, **ENTONCES** la semana muestra «3,5 h de 5 h» y 70 % desde el primer momento.                                                                                                     | RN-14        |
+| H-02.8  | **DADO** una meta de 10 h, **CUANDO** el martes 10 registro dos partidas de 24 h y de 10 h, **ENTONCES** las dos se aceptan y veo 100 % y «34 h de 10 h».                                                                                                                                      | RN-18        |
+| H-02.9  | **DADO** el detalle de un juego con meta de 5 h y 3,5 h jugadas esta semana (70 %), **CUANDO** registro una partida de 1 h hoy, **ENTONCES** el progreso pasa a «4,5 h de 5 h» y 90 % sin que yo recargue la página. Lo mismo al eliminar esa partida (vuelve a 70 %) y al editar su duración. | —            |
+| H-02.10 | **DADO** que el progreso todavía no llega, **ENTONCES** veo un estado de carga. **DADO** que la consulta falla, **ENTONCES** veo un mensaje de error con opción de reintentar y el resto del detalle del juego sigue visible.                                                                  | —            |
 
 ### H-03 · Ver cuántos días jugué esta semana frente a mi meta
 
@@ -133,8 +135,8 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
 | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | D-P2.1 | **DADO** una partida con fecha «2026-11-12», **CUANDO** la registro, **ENTONCES** se acepta y cuenta para el jueves 12.                                                                                                                              | RN-03 |
 | D-P2.2 | **DADO** una fecha con hora («2026-11-12 10:00»), con zona horaria, con texto («ayer»), vacía o inexistente («2026-02-30»), **CUANDO** registro o edito una partida, **ENTONCES** se rechaza con un mensaje que pide una fecha de calendario válida. | RN-03 |
-| D-P2.3 | **DADO** que son las 21:00 del jueves 12 en Ecuador (02:00 del viernes 13 en UTC), **CUANDO** registro una partida del viernes 13, **ENTONCES** se rechaza por ser futura. La del jueves 12 se acepta.                                               | RN-10 |
-| D-P2.4 | **DADO** el instante 2026-11-10 a las 04:59 UTC, **CUANDO** se calcula «hoy» en Ecuador, **ENTONCES** el resultado es el lunes 9 de noviembre.                                                                                                       | RN-11 |
+| D-P2.3 | **DADO** que en Ecuador son las 21:00 del jueves 12, **CUANDO** registro una partida del viernes 13, **ENTONCES** se rechaza por ser futura, sin importar la zona horaria desde la que se use la aplicación. La del jueves 12 se acepta.             | RN-10 |
+| D-P2.4 | **DADO** que en Ecuador son las 23:59 del lunes 9 de noviembre, **CUANDO** se determina el día de hoy, **ENTONCES** es el lunes 9 y la semana en curso es la del 9 al 15.                                                                            | RN-11 |
 | D-P2.5 | **DADO** que son las 21:00 del jueves 12 en Ecuador y el equipo de la persona usa otra zona horaria, **CUANDO** abro el formulario de nueva partida, **ENTONCES** la fecha propuesta es el jueves 12.                                                | RN-10 |
 
 - **Tickets:** T-02 (test), T-03 (código), T-04 (aplicación en el registro y la edición de partidas) y T-23 (frontend).
@@ -155,7 +157,7 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
 | D-P5.2 | **DADO** partidas que suman 870 minutos, **CUANDO** pido el resumen, **ENTONCES** veo 14,5 h. Con 100 minutos veo 1,67 h.                                                 | —     |
 | D-P5.3 | **DADO** dos partidas con la misma fecha y avances del 40 % y del 60 %, la de 60 % registrada después, **CUANDO** pido el resumen, **ENTONCES** el avance actual es 60 %. | RN-06 |
 | D-P5.4 | **DADO** una partida antigua con fecha futura, **CUANDO** pido el resumen, **ENTONCES** no se cuenta: no suma horas ni define el avance actual.                           | RN-10 |
-| D-P5.5 | **DADO** un juego con partidas en la base de desarrollo, **CUANDO** comparo su resumen antes y después del cambio, **ENTONCES** es idéntico.                              | —     |
+| D-P5.5 | **DADO** un juego con partidas, **CUANDO** comparo su resumen antes y después del cambio, **ENTONCES** es idéntico.                                                       | —     |
 
 - **Tickets:** T-05 (test) y T-06 (código).
 - **DoD:**
@@ -173,41 +175,43 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
 - La spec del ticket está en `docs/specs/` y se commiteó antes que el código.
 - `npm run check` pasa en las carpetas tocadas, y `npm test` pasa en el backend (desde T-01).
 - El commit tiene la forma `<tipo>(E2): T-xx descripción` y solo contiene los archivos del ticket.
+- Los tickets de deuda llevan la marca en su commit: `(deuda P2)` en T-02, T-03, T-04 y T-23, y `(deuda P5)` en T-05 y T-06. Por ejemplo, `test(E2): T-02 tests de fecha de calendario (deuda P2)`.
 - Duración máxima de media jornada.
 - Frontend: se revisa contra DESIGN.md, con solo variables CSS de `:root` y `fetch` solo en `frontend/src/api/`.
 
-| Id   | Tipo     | Título                                                 | Cubre             | Depende de             |
-| ---- | -------- | ------------------------------------------------------ | ----------------- | ---------------------- |
-| T-01 | test     | Configurar Vitest en el backend                        | base              | —                      |
-| T-02 | test     | Tests de fecha de calendario y del «hoy» en Ecuador    | D-P2              | T-01                   |
-| T-03 | backend  | Funciones puras de fecha y del «hoy» en Ecuador        | D-P2              | T-02                   |
-| T-04 | backend  | Validar la fecha al crear y editar partidas            | D-P2              | T-03                   |
-| T-05 | test     | Tests del resumen puro                                 | D-P5              | T-01                   |
-| T-06 | deuda    | Resumen como función pura                              | D-P5              | T-05, T-03             |
-| T-07 | test     | Tests de la semana de lunes a domingo                  | H-02, H-03        | T-01                   |
-| T-08 | backend  | Función pura de la semana                              | H-02, H-03        | T-07                   |
-| T-09 | test     | Tests de horas, días y porcentaje de la semana         | H-02, H-03        | T-01                   |
-| T-10 | backend  | Función pura del progreso de la semana                 | H-02, H-03        | T-09, T-08             |
-| T-11 | test     | Tests de racha actual y mejor racha                    | H-04              | T-01                   |
-| T-12 | backend  | Función pura de racha                                  | H-04              | T-11                   |
-| T-13 | test     | Tests de hitos y de qué estados admiten meta           | H-05, H-01        | T-01                   |
-| T-14 | backend  | Funciones puras de hitos y de qué estados admiten meta | H-05, H-01        | T-13, T-06             |
-| T-15 | test     | Tests del modelo Meta y del error de conflicto         | H-01, H-06        | T-01                   |
-| T-16 | backend  | Error de conflicto (409 `conflicto`)                   | H-01, H-06        | T-15                   |
-| T-17 | backend  | Modelo Meta con índice de meta activa única            | H-01              | T-15, T-16             |
-| T-18 | backend  | Crear y consultar una meta                             | H-01              | T-17, T-14             |
-| T-19 | backend  | Editar, desactivar, reactivar y listar metas           | H-06, H-07        | T-18                   |
-| T-20 | backend  | Progreso semanal del juego                             | H-02 a H-05, H-07 | T-10, T-12, T-14, T-17 |
-| T-21 | backend  | Cascada metas → partidas → videojuego                  | H-08              | T-17                   |
-| T-22 | docs     | README, pruebas.http y .env.example                    | todas             | T-04 a T-21            |
-| T-23 | frontend | `hoyISO` en hora de Ecuador                            | D-P2              | T-04                   |
-| T-24 | frontend | Tipos, API de metas y progreso, y tokens de E2         | base              | T-19, T-20             |
-| T-25 | frontend | Sección de progreso semanal                            | H-02, H-03, H-04  | T-24                   |
-| T-26 | frontend | Hitos y aviso de juego terminado                       | H-05, H-07        | T-25                   |
-| T-27 | frontend | Formulario de crear y editar meta                      | H-01, H-06        | T-24                   |
-| T-28 | frontend | Desactivar, reactivar e historial de metas             | H-06              | T-25, T-27             |
-| T-29 | frontend | La confirmación de borrar un juego menciona las metas  | H-08              | T-21                   |
-| T-30 | frontend | Editar una partida (recortable)                        | H-09              | T-04, T-23             |
+| Id   | Tipo     | Título                                                         | Cubre             | Depende de             |
+| ---- | -------- | -------------------------------------------------------------- | ----------------- | ---------------------- |
+| T-01 | test     | Configurar Vitest en el backend                                | base              | —                      |
+| T-02 | test     | Tests de fecha de calendario y del «hoy» en Ecuador (deuda P2) | D-P2              | T-01                   |
+| T-03 | backend  | Funciones puras de fecha y del «hoy» en Ecuador (deuda P2)     | D-P2              | T-02                   |
+| T-04 | backend  | Validar la fecha al crear y editar partidas (deuda P2)         | D-P2              | T-03                   |
+| T-05 | test     | Tests del resumen puro (deuda P5)                              | D-P5              | T-01                   |
+| T-06 | deuda    | Resumen como función pura (deuda P5)                           | D-P5              | T-05, T-03             |
+| T-07 | test     | Tests de la semana de lunes a domingo                          | H-02, H-03        | T-01                   |
+| T-08 | backend  | Función pura de la semana                                      | H-02, H-03        | T-07                   |
+| T-09 | test     | Tests de horas, días y porcentaje de la semana                 | H-02, H-03        | T-01                   |
+| T-10 | backend  | Función pura del progreso de la semana                         | H-02, H-03        | T-09, T-08             |
+| T-11 | test     | Tests de racha actual y mejor racha                            | H-04              | T-01                   |
+| T-12 | backend  | Función pura de racha                                          | H-04              | T-11                   |
+| T-13 | test     | Tests de hitos y de qué estados admiten meta                   | H-05, H-01        | T-01                   |
+| T-14 | backend  | Funciones puras de hitos y de qué estados admiten meta         | H-05, H-01        | T-13, T-06             |
+| T-15 | test     | Tests del modelo Meta y del error de conflicto                 | H-01, H-06        | T-01                   |
+| T-16 | backend  | Error de conflicto (409 `conflicto`)                           | H-01, H-06        | T-15                   |
+| T-17 | backend  | Modelo Meta con índice de meta activa única                    | H-01              | T-15, T-16             |
+| T-18 | backend  | Crear y consultar una meta                                     | H-01              | T-17, T-14             |
+| T-19 | backend  | Editar, desactivar, reactivar y listar metas                   | H-06, H-07        | T-18                   |
+| T-20 | backend  | Progreso semanal del juego                                     | H-02 a H-05, H-07 | T-10, T-12, T-14, T-17 |
+| T-21 | backend  | Cascada metas → partidas → videojuego                          | H-08              | T-17                   |
+| T-22 | docs     | README, pruebas.http y .env.example                            | todas             | T-04 a T-21            |
+| T-23 | frontend | `hoyISO` en hora de Ecuador (deuda P2)                         | D-P2              | T-04                   |
+| T-24 | frontend | Tipos, API de metas y progreso, y tokens de E2                 | base              | T-19, T-20             |
+| T-25 | frontend | Sección de progreso semanal                                    | H-02, H-03, H-04  | T-24                   |
+| T-26 | frontend | Hitos y aviso de juego terminado                               | H-05, H-07        | T-25                   |
+| T-27 | frontend | Formulario de crear y editar meta                              | H-01, H-06        | T-24                   |
+| T-28 | frontend | Desactivar, reactivar e historial de metas                     | H-06              | T-25, T-27             |
+| T-29 | frontend | La confirmación de borrar un juego menciona las metas          | H-08              | T-21                   |
+| T-30 | frontend | Editar una partida (recortable)                                | H-09              | T-04, T-23             |
+| T-31 | docs     | Desplegar en Render, verificar E2 y abrir el pull request      | todas             | T-22 a T-30            |
 
 ### T-01 · test · Configurar Vitest en el backend
 
@@ -221,7 +225,7 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
   - `package.json` tiene la versión sin `^` ni `~`.
   - `npm run build` no compila los archivos `*.test.ts` dentro de `dist/`.
 
-### T-02 · test · Tests de fecha de calendario y del «hoy» en Ecuador
+### T-02 · test · Tests de fecha de calendario y del «hoy» en Ecuador (deuda P2)
 
 - **Descripción:** crear `backend/src/dominio/fechas.test.ts` con estos casos:
   - formatos válidos e inválidos: con hora, con zona, texto, vacío y `2026-02-30` (D-P2.1 y D-P2.2);
@@ -229,7 +233,7 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
   - la frontera `2026-11-10T04:59Z`, que debe dar `2026-11-09` (D-P2.4).
 - **DoD:** los tests existen, cubren D-P2.1 a D-P2.4 y fallan por falta de implementación.
 
-### T-03 · backend · Funciones puras de fecha y del «hoy» en Ecuador
+### T-03 · backend · Funciones puras de fecha y del «hoy» en Ecuador (deuda P2)
 
 - **Descripción:** crear `backend/src/dominio/fechas.ts` con tres funciones:
   - validar `AAAA-MM-DD` como día de calendario;
@@ -238,7 +242,7 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
   - Sin Mongoose y sin leer la hora internamente.
 - **DoD:** los tests de T-02 pasan.
 
-### T-04 · backend · Validar la fecha al crear y editar partidas
+### T-04 · backend · Validar la fecha al crear y editar partidas (deuda P2)
 
 - **Descripción:**
   - Al crear y al actualizar en `partidas.service.ts`, validar el formato y rechazar fechas futuras con un 400 de tipo `validacion`.
@@ -252,12 +256,12 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
     - `POST` con la fecha de hoy → 201.
   - Los cuatro casos están en `pruebas.http`.
 
-### T-05 · test · Tests del resumen puro
+### T-05 · test · Tests del resumen puro (deuda P5)
 
 - **Descripción:** crear `backend/src/dominio/resumen.test.ts` con los casos D-P5.1 a D-P5.4.
 - **DoD:** los tests existen y fallan por falta de implementación.
 
-### T-06 · deuda · Resumen como función pura
+### T-06 · deuda · Resumen como función pura (deuda P5)
 
 - **Descripción:**
   - Crear `backend/src/dominio/resumen.ts`, que calcula el resumen a partir de las partidas y de «hoy».
@@ -265,7 +269,7 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
   - `resumenDeVideojuego` queda solo con la consulta y la llamada a la función pura.
 - **DoD:**
   - Los tests de T-05 pasan.
-  - D-P5.5 está verificado: el resumen de un juego con partidas y de otro sin partidas es idéntico antes y después del cambio.
+  - D-P5.5 está verificado en la base de desarrollo: el resumen de un juego con partidas y de otro sin partidas es idéntico antes y después del cambio.
 
 ### T-07 · test · Tests de la semana de lunes a domingo
 
@@ -274,7 +278,7 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
   - lunes 16 → del 16 al 22;
   - semana que cruza meses: 2026-12-02 → del 2026-11-30 al 2026-12-06;
   - semana que cruza años: 2027-01-01 → del 2026-12-28 al 2027-01-03.
-- **DoD:** los tests existen y fallan. El formato `AAAA-MM-DD` con los dos extremos incluidos queda fijado en la spec.
+- **DoD:** los tests existen y fallan. Comprueban el formato `AAAA-MM-DD` con los dos extremos incluidos (sección 5, decisiones para las specs).
 
 ### T-08 · backend · Función pura de la semana
 
@@ -357,12 +361,12 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
 
 - **Descripción:** añadir `POST /api/metas` y `GET /api/metas/:id`, siguiendo la arquitectura en capas. El servicio comprueba:
   - que el juego existe (404 `referencia_inexistente`);
-  - que su estado admite meta (RN-07);
-  - que no hay otra meta activa (409, RN-09), con el índice como red de seguridad.
+  - que su estado admite meta (409 `conflicto`, RN-07);
+  - que no hay otra meta activa (409 `conflicto`, RN-09), con el índice como red de seguridad.
 - **DoD:** curl contra la base de desarrollo:
   - creación correcta → 201;
-  - segunda meta activa → 409;
-  - juego completado → rechazo, con el código que fije la spec;
+  - segunda meta activa → 409 `conflicto`;
+  - juego completado o abandonado → 409 `conflicto`;
   - juego inexistente → 404;
   - id mal formado → 400;
   - límites fuera de rango → 400.
@@ -373,13 +377,13 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
   - `PUT /api/metas/:id` con lista blanca: `horasSemanales`, `diasPorSemana`, `hitos` y `activa`. Se ignora `videojuego`.
   - `PATCH /api/metas/:id/desactivar`.
   - `GET /api/videojuegos/:id/metas`, de la más reciente a la más antigua.
-  - Reactivar con `activa: true` aplica RN-07 y RN-09.
+  - Reactivar con `activa: true` aplica RN-07 y RN-09; los dos rechazos responden 409 `conflicto`.
   - No hay ruta para borrar (RN-16).
 - **DoD:** curl contra la base de desarrollo:
   - editar → 200;
   - desactivar → 200;
-  - reactivar con otra meta activa → 409;
-  - reactivar en un juego completado → rechazo;
+  - reactivar con otra meta activa → 409 `conflicto`;
+  - reactivar en un juego completado o abandonado → 409 `conflicto`;
   - la lista devuelve activas e inactivas en orden.
 
 ### T-20 · backend · Progreso semanal del juego
@@ -408,14 +412,22 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
     - modelo Meta, rutas nuevas, fórmulas de semana, racha, hitos y porcentaje;
     - reglas de fecha;
     - cómo ejecutar los tests;
-    - corregir la URL de clonación y «Cinco pantallas» (P11).
+    - corregir la URL de clonación y «Cinco pantallas» (P11);
+    - sección «Cómo trabajamos con el agente», con:
+      - el harness: AGENTS.md, CLAUDE.md, hooks, skills y DESIGN.md;
+      - el flujo seguido: diagnóstico → harness → PRD → backlog → specs → código → auditoría;
+      - dónde está cada documento.
   - `pruebas.http`: metas, progreso y casos 400, 404 y 409 (P12).
   - `.env.example`: confirmar que no hay variables nuevas y añadir una nota sobre usar un `MONGODB_DB` de desarrollo distinto del de Render.
 - **DoD:**
   - Cada ruta nueva tiene al menos una petición en `pruebas.http`.
   - El README describe las 4 fórmulas y el comando `npm test`.
+  - El README tiene la sección «Cómo trabajamos con el agente» con:
+    - los 5 elementos del harness;
+    - los 7 pasos del flujo;
+    - la ruta de cada documento (diagnóstico, PRD, épicas, backlog, specs y auditoría).
 
-### T-23 · frontend · `hoyISO` en hora de Ecuador
+### T-23 · frontend · `hoyISO` en hora de Ecuador (deuda P2)
 
 - **Descripción:** `hoyISO()` en `tipos.ts` usa `Intl` con America/Guayaquil en lugar de la zona del navegador.
 - **DoD:**
@@ -439,10 +451,18 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
   - «X h de Y h»;
   - «N de M días»;
   - racha actual y mejor racha en Orbitron.
-  - Sin meta, muestra el estado vacío que invita a crear una (RN-12).
-  - Se recarga al volver de registrar una partida.
+  - Estados de la sección con `EstadoCarga`:
+    - carga mientras llega el progreso;
+    - error con «Reintentar» que no oculta el resto del detalle;
+    - vacío sin meta, que invita a crear una (RN-12).
+  - El progreso se vuelve a pedir, sin recargar la página, al registrar y al eliminar una partida del juego (H-02.9).
 - **DoD:**
   - Revisión visual de H-02.1, H-02.3, H-02.6, H-03.1, H-03.3, H-04.1 y H-04.7 en la base de desarrollo.
+  - H-02.9 está verificado: al registrar una partida de 1 h, el progreso pasa de 70 % a 90 % sin recargar, y vuelve a 70 % al eliminarla.
+  - H-02.10 está verificado:
+    - el estado de carga se ve con la red lenta simulada;
+    - con la API detenida aparece el error con «Reintentar» y el resto del detalle sigue visible;
+    - «Reintentar» recupera el progreso al volver la API.
   - Contraste AA y foco visible.
   - Ningún color literal.
 
@@ -481,8 +501,23 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
 - **Descripción:**
   - Ruta de edición que reutiliza `FormularioPartida` en modo edición, con `obtenerPartida` y `actualizarPartida`, que ya existen en `partidasApi.ts`.
   - Botón «Editar» en las listas de partidas.
-- **DoD:** revisión visual de H-09.1 a H-09.4.
+- **DoD:**
+  - Revisión visual de H-09.1 a H-09.4.
+  - H-02.9 al editar: al cambiar la duración de una partida de la semana, el progreso del detalle refleja las horas nuevas sin recargar la página.
 - **Si no entra:** pasa a la deuda técnica con su motivo.
+
+### T-31 · docs · Desplegar en Render, verificar E2 y abrir el pull request
+
+- **Depende de:** T-22 a T-30.
+- **Descripción:**
+  - Actualizar los servicios de Render.
+  - Comprobar de punta a punta los flujos de la demo.
+  - Abrir el PR de `feature/e2-metas-rachas` a `main`.
+- **DoD:**
+  - Las URLs públicas del frontend y de la API tienen E2 funcionando.
+  - No hay ningún secreto en Git.
+  - `.env.example` no tiene credenciales.
+  - La descripción del PR lista los tickets y enlaza `docs/AUDITORIA.md`.
 
 ---
 
@@ -529,7 +564,9 @@ Cubre el problema P2 del diagnóstico, que incluye P9.
 
 Las 20 reglas tienen al menos un criterio. Ninguna RN queda sin cubrir.
 
-**Pendientes técnicos para las specs.** No son producto; los decide cada spec:
+H-02.9 y H-02.10 no comprueban ninguna RN (columna «—»): cubren el refresco y los estados de la sección.
 
-- El formato de `semana.inicio` y `semana.fin`. La propuesta es `AAAA-MM-DD` con los dos extremos incluidos.
-- El código de rechazo por RN-07, en T-18 y T-19.
+**Decisiones para las specs:**
+
+- **Rechazos por RN-07** (juego completado o abandonado, al crear o reactivar una meta): responden 409 con tipo `conflicto`, igual que RN-09. La petición es válida, pero choca con el estado actual. Se aplica en T-18 y T-19.
+- **`semana.inicio` y `semana.fin`:** formato `AAAA-MM-DD`, con los dos extremos incluidos (lunes y domingo). Se aplica en T-07, T-08 y T-20.
