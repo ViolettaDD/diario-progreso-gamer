@@ -89,6 +89,59 @@ export interface Resumen {
   porcentajeAvanceActual: number;
 }
 
+/* ── E2 · Metas y progreso semanal ── */
+
+/** Hito de avance de una meta (embebido; sin _id propio). */
+export interface Hito {
+  descripcion: string;
+  porcentajeObjetivo: number;
+}
+
+/** Meta tal como la devuelve la API (GET /api/metas/:id, GET /api/videojuegos/:id/metas). */
+export interface Meta {
+  _id: string;
+  videojuego: string;
+  horasSemanales: number;
+  diasPorSemana: number;
+  activa: boolean;
+  hitos: Hito[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+/** Cuerpo de POST /api/metas (con videojuego) y de PUT /api/metas/:id (sin videojuego). */
+export interface MetaInput {
+  videojuego?: string;
+  horasSemanales: number;
+  diasPorSemana: number;
+  hitos: Hito[];
+  activa?: boolean;
+}
+
+/** Forma exacta de GET /api/videojuegos/:id/progreso-semanal. El frontend solo la muestra, no calcula nada. */
+export interface ProgresoSemanal {
+  semana: { inicio: string; fin: string };
+  meta: { horasSemanales: number; diasPorSemana: number } | null;
+  horasSemana: number;
+  porcentajeHoras: number | null;
+  diasJugadosSemana: number;
+  rachaActual: number;
+  mejorRacha: number;
+  hitos: Array<Hito & { alcanzado: boolean }>;
+}
+
+const formatoHoras = new Intl.NumberFormat('es-EC', { maximumFractionDigits: 1 });
+
+/** Horas con coma decimal y como máximo 1 decimal: 3.5 → «3,5 h». */
+export function formatearHoras(horas: number): string {
+  return `${formatoHoras.format(horas)} h`;
+}
+
+/** Día de creación de una meta en America/Guayaquil: «2 de noviembre». */
+export function formatearDiaCreacion(iso: string): string {
+  return new Date(iso).toLocaleDateString('es-EC', { timeZone: 'America/Guayaquil', day: 'numeric', month: 'long' });
+}
+
 export function nombreVideojuego(v: Partida['videojuego']): string {
   if (v === null) return 'Videojuego eliminado';
   return typeof v === 'string' ? `Videojuego ${v}` : v.nombre;

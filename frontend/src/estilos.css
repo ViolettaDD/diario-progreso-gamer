@@ -27,6 +27,11 @@
   --radio-grande: 22px;
   --radio-chico: 12px;
   --sombra: 0 18px 40px rgba(0, 0, 0, 0.5);
+  /* E2 · Metas y rachas (DESIGN.md) */
+  --meta-ok: var(--jugando);
+  --meta-pendiente: var(--tinta-suave);
+  --racha: var(--acento);
+  --tinta-oscura: #1a0c00; /* sin uso por ahora (anotada en P6) */
   color-scheme: dark;
 }
 
