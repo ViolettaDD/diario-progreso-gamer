@@ -42,3 +42,41 @@ export async function crear(body: unknown) {
   if (meta.activa) await exigirPuedeQuedarActiva(juego._id, juego.estado);
   return meta.save(); // el índice único parcial cubre la carrera entre dos peticiones (E11000 → 409)
 }
+
+const CAMPOS_EDITAR = ['horasSemanales', 'diasPorSemana', 'hitos', 'activa'] as const;
+
+/**
+ * PUT: solo horasSemanales, diasPorSemana, hitos y activa (videojuego y cualquier otro campo se ignoran).
+ * Se carga y se guarda con save() para que corran todas las validaciones y el recorte de los hitos.
+ * «Reactivar» es pasar activa de false a true: solo entonces aplican RN-07 y RN-09.
+ */
+export async function actualizar(id: string, body: unknown) {
+  const cambios = elegirCampos(body, CAMPOS_EDITAR, true);
+  const meta = await obtener(id);
+  const reactivando = meta.activa === false && cambios.activa === true;
+  meta.set(cambios);
+  await meta.validate(); // → 400
+  if (reactivando) {
+    const juego = await Videojuego.findById(meta.videojuego);
+    if (!juego) throw new ApiError(404, 'Videojuego no encontrado');
+    await exigirPuedeQuedarActiva(juego._id, juego.estado, meta._id);
+  }
+  return meta.save();
+}
+
+/** PATCH /desactivar: deja la meta inactiva; si ya lo estaba, responde igual sin cambiar nada. */
+export async function desactivar(id: string) {
+  const meta = await obtener(id);
+  if (meta.activa) {
+    meta.activa = false;
+    await meta.save();
+  }
+  return meta;
+}
+
+/** Ruta anidada GET /api/videojuegos/:id/metas: activas e inactivas, la más reciente primero (historial). */
+export async function listarPorVideojuego(videojuegoId: string) {
+  const existe = await Videojuego.exists({ _id: videojuegoId }); // id mal formado → CastError → 400
+  if (!existe) throw new ApiError(404, 'Videojuego no encontrado');
+  return Meta.find({ videojuego: videojuegoId }).sort({ createdAt: -1, _id: -1 });
+}

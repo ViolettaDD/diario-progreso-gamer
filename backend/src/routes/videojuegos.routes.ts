@@ -13,4 +13,5 @@ router.delete('/:id', c.eliminar);
 // Relaciones y cálculo
 router.get('/:id/partidas', c.listarPartidas); // ruta anidada
 router.get('/:id/resumen', c.resumen); // resumen calculado en el servicio
+router.get('/:id/metas', c.listarMetas); // historial de metas del juego (E2)
 router.patch('/:id/logros/:logroId', c.actualizarLogro); // actualización de sub-documento embebido

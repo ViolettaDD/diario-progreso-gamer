@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as servicio from '../services/videojuegos.service';
 import * as partidas from '../services/partidas.service';
+import * as metas from '../services/metas.service';
 import { queryTexto } from '../validacion';
 
 /** Capa HTTP: traduce peticiones y respuestas. Las reglas y consultas viven en los servicios. */
@@ -69,6 +70,16 @@ export async function listarPartidas(req: Request, res: Response, next: NextFunc
 export async function resumen(req: Request, res: Response, next: NextFunction) {
   try {
     res.json(await partidas.resumenDeVideojuego(req.params.id));
+  } catch (e) {
+    next(e);
+  }
+}
+
+/** Ruta anidada: GET /api/videojuegos/:id/metas (historial de metas, la más reciente primero). */
+export async function listarMetas(req: Request, res: Response, next: NextFunction) {
+  try {
+    const lista = await metas.listarPorVideojuego(req.params.id);
+    res.json({ metas: lista, total: lista.length, requestId: req.id });
   } catch (e) {
     next(e);
   }

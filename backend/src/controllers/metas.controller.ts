@@ -18,3 +18,19 @@ export async function crear(req: Request, res: Response, next: NextFunction) {
     next(e);
   }
 }
+
+export async function actualizar(req: Request, res: Response, next: NextFunction) {
+  try {
+    res.json({ meta: await servicio.actualizar(req.params.id, req.body), requestId: req.id });
+  } catch (e) {
+    next(e);
+  }
+}
+
+export async function desactivar(req: Request, res: Response, next: NextFunction) {
+  try {
+    res.json({ meta: await servicio.desactivar(req.params.id), requestId: req.id });
+  } catch (e) {
+    next(e);
+  }
+}
