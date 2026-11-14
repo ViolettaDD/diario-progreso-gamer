@@ -7,8 +7,14 @@ import { ApiError, TipoError } from '../apiError';
  * 1. Validación de esquema (ValidationError) ........ 400  tipo "validacion"
  * 2. Id mal formado (CastError) ..................... 400  tipo "id_mal_formado"
  * 3. Recurso o referencia inexistente (ApiError) .... 404  tipo "no_encontrado" / "referencia_inexistente"
- * 4. Error inesperado ............................... 500  tipo "interno" (sin stack ni secretos)
+ * 4. Conflicto con el estado actual ................. 409  tipo "conflicto" (ApiError 409 o clave duplicada E11000)
+ * 5. Error inesperado ............................... 500  tipo "interno" (sin stack ni secretos)
  */
+
+/** Error de MongoDB por clave duplicada (código 11000): p. ej. el índice único de meta activa por juego. */
+function esClaveDuplicada(err: unknown): boolean {
+  return typeof err === 'object' && err !== null && (err as { code?: unknown }).code === 11000;
+}
 export const errorHandler: ErrorRequestHandler = (err: unknown, req, res, next) => {
   if (res.headersSent) {
     next(err);
@@ -29,6 +35,10 @@ export const errorHandler: ErrorRequestHandler = (err: unknown, req, res, next) 
     tipo = 'validacion';
     error = 'Los datos no cumplen las validaciones del esquema';
     detalles = Object.values(err.errors).map((e) => e.message);
+  } else if (esClaveDuplicada(err)) {
+    status = 409;
+    tipo = 'conflicto';
+    error = 'El cambio choca con un dato que ya existe. Revisa si el juego ya tiene una meta activa';
   } else if (err instanceof mongoose.Error.CastError) {
     status = 400;
     tipo = 'id_mal_formado';
