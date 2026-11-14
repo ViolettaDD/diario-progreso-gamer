@@ -37,26 +37,33 @@ interface Props {
  * Sección «Esta semana» del detalle (T-25). Solo muestra lo que calcula el backend:
  * la única operación es Math.round(porcentajeHoras / 10) para los segmentos de la barra.
  */
-export function SeccionProgreso({ progreso, cargando, error, onReintentar }: Props) {
+export function SeccionProgreso({ progreso, cargando, error, onReintentar, estadoJuego }: Props) {
   return (
     <section className="panel progreso-seccion" aria-labelledby="titulo-progreso">
       <h2 id="titulo-progreso">Esta semana</h2>
       {error || !progreso ? (
         <EstadoCarga cargando={cargando} error={error} onReintentar={onReintentar} />
       ) : (
-        <ContenidoProgreso progreso={progreso} />
+        <ContenidoProgreso progreso={progreso} estadoJuego={estadoJuego} />
       )}
     </section>
   );
 }
 
-function ContenidoProgreso({ progreso }: { progreso: ProgresoSemanal }) {
+function ContenidoProgreso({ progreso, estadoJuego }: { progreso: ProgresoSemanal; estadoJuego: Estado }) {
   const { meta, porcentajeHoras } = progreso;
   const conMeta = meta !== null && porcentajeHoras !== null;
+  const juegoTerminado = estadoJuego === 'completado' || estadoJuego === 'abandonado';
 
   return (
     <>
       <p className="progreso-semana">{textoSemana(progreso.semana)}</p>
+
+      {conMeta && juegoTerminado && (
+        <p className="estado meta-aviso" role="status">
+          Este juego está {estadoJuego} y su meta sigue activa. Desactívala cuando ya no la necesites.
+        </p>
+      )}
 
       <dl className="resumen-datos progreso-datos">
         <div>
@@ -113,6 +120,22 @@ function ContenidoProgreso({ progreso }: { progreso: ProgresoSemanal }) {
           </dd>
         </div>
       </dl>
+
+      {conMeta && progreso.hitos.length > 0 && (
+        <>
+          <h3>Hitos</h3>
+          <ul className="hito-lista">
+            {progreso.hitos.map((hito, i) => (
+              <li key={i}>
+                {hito.descripcion} · {hito.porcentajeObjetivo} % ·{' '}
+                <strong className={hito.alcanzado ? 'hito-alcanzado' : 'hito-pendiente'}>
+                  {hito.alcanzado ? 'Alcanzado' : 'Pendiente'}
+                </strong>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
 
       {!conMeta && (
         <p className="estado estado-vacio">Aún no tienes una meta para este juego. Crea una para seguir tu semana.</p>

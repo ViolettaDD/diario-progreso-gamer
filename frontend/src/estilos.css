@@ -292,3 +292,8 @@ textarea { resize: vertical; }
 .progreso-semana { margin: 0; color: var(--tinta-suave); }
 .progreso-datos { margin-top: 1rem; }
 .progreso-cifra { color: var(--racha); }
+/* E2 · Hitos y aviso de juego terminado (T-26). El estado del hito también va escrito, no solo en color. */
+.hito-lista { list-style: none; padding: 0; margin: 0; }
+.hito-alcanzado { color: var(--meta-ok); }
+.hito-pendiente { color: var(--meta-pendiente); }
+.meta-aviso { border: medium solid var(--acento); color: var(--tinta); }
