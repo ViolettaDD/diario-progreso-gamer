@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as servicio from '../services/videojuegos.service';
 import * as partidas from '../services/partidas.service';
 import * as metas from '../services/metas.service';
+import * as progreso from '../services/progreso.service';
 import { queryTexto } from '../validacion';
 
 /** Capa HTTP: traduce peticiones y respuestas. Las reglas y consultas viven en los servicios. */
@@ -80,6 +81,15 @@ export async function listarMetas(req: Request, res: Response, next: NextFunctio
   try {
     const lista = await metas.listarPorVideojuego(req.params.id);
     res.json({ metas: lista, total: lista.length, requestId: req.id });
+  } catch (e) {
+    next(e);
+  }
+}
+
+/** GET /api/videojuegos/:id/progreso-semanal: forma del diagnóstico §7.3, sin envoltorio (como el resumen). */
+export async function progresoSemanal(req: Request, res: Response, next: NextFunction) {
+  try {
+    res.json(await progreso.progresoSemanalDeVideojuego(req.params.id));
   } catch (e) {
     next(e);
   }

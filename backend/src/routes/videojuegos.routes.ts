@@ -14,4 +14,5 @@ router.delete('/:id', c.eliminar);
 router.get('/:id/partidas', c.listarPartidas); // ruta anidada
 router.get('/:id/resumen', c.resumen); // resumen calculado en el servicio
 router.get('/:id/metas', c.listarMetas); // historial de metas del juego (E2)
+router.get('/:id/progreso-semanal', c.progresoSemanal); // semana lunes-domingo en America/Guayaquil (E2)
 router.patch('/:id/logros/:logroId', c.actualizarLogro); // actualización de sub-documento embebido
