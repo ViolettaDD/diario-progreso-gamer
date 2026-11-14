@@ -287,3 +287,8 @@ textarea { resize: vertical; }
   text-shadow: 3px 3px 0 rgba(255, 61, 84, 0.8);
 }
 
+/* E2 · Sección de progreso semanal (T-25). Solo variables de :root; espaciado de la escala de DESIGN.md. */
+.progreso-seccion { margin-bottom: 1.25rem; }
+.progreso-semana { margin: 0; color: var(--tinta-suave); }
+.progreso-datos { margin-top: 1rem; }
+.progreso-cifra { color: var(--racha); }

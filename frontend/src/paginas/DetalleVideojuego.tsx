@@ -4,8 +4,10 @@ import { eliminarVideojuego, marcarLogro, obtenerResumen, obtenerVideojuego } fr
 import { eliminarPartida, listarPartidasDeVideojuego } from '../api/partidasApi';
 import { EstadoCarga } from '../components/EstadoCarga';
 import { BloqueResumen } from '../components/BloqueResumen';
+import { SeccionProgreso } from '../components/SeccionProgreso';
+import { obtenerProgresoSemanal } from '../api/metasApi';
 import { ETIQUETAS_ESTADO, ETIQUETAS_GENERO, ETIQUETAS_PLATAFORMA, formatearFecha, mensajeDeError } from '../tipos';
-import type { Logro, Partida, Resumen, Videojuego } from '../tipos';
+import type { Logro, Partida, ProgresoSemanal, Resumen, Videojuego } from '../tipos';
 
 export function DetalleVideojuego() {
   const { id = '' } = useParams();
@@ -41,8 +43,35 @@ export function DetalleVideojuego() {
     };
   }, [id, recarga]);
 
-  /** Vuelve a pedir resumen y partidas al backend (tras eliminar una partida). */
+  /* Progreso semanal (T-25): se pide aparte para que un fallo no tape el resto del detalle (H-02.10). */
+  const [progreso, setProgreso] = useState<ProgresoSemanal | null>(null);
+  const [cargandoProgreso, setCargandoProgreso] = useState(true);
+  const [errorProgreso, setErrorProgreso] = useState<string | null>(null);
+  const [recargaProgreso, setRecargaProgreso] = useState(0);
+
+  useEffect(() => {
+    let vigente = true;
+    setProgreso(null);
+    setCargandoProgreso(true);
+    setErrorProgreso(null);
+    obtenerProgresoSemanal(id)
+      .then((p) => {
+        if (vigente) setProgreso(p);
+      })
+      .catch((e: unknown) => {
+        if (vigente) setErrorProgreso(mensajeDeError(e, 'No se pudo cargar el progreso de esta semana.'));
+      })
+      .finally(() => {
+        if (vigente) setCargandoProgreso(false);
+      });
+    return () => {
+      vigente = false;
+    };
+  }, [id, recarga, recargaProgreso]);
+
+  /** Vuelve a pedir resumen, partidas y progreso semanal al backend (tras eliminar una partida, H-02.9). */
   async function refrescarProgreso() {
+    setRecargaProgreso((x) => x + 1);
     const [r, p] = await Promise.all([obtenerResumen(id), listarPartidasDeVideojuego(id)]);
     setResumen(r);
     setPartidas(p);
@@ -140,6 +169,14 @@ export function DetalleVideojuego() {
       )}
 
       {resumen && <BloqueResumen resumen={resumen} />}
+
+      <SeccionProgreso
+        progreso={progreso}
+        cargando={cargandoProgreso}
+        error={errorProgreso}
+        onReintentar={() => setRecargaProgreso((x) => x + 1)}
+        estadoJuego={juego.estado}
+      />
 
       <div className="columnas">
         <section className="panel" aria-labelledby="titulo-logros">
