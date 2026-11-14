@@ -110,3 +110,155 @@ PUT http://localhost:3000/api/partidas/PARTIDA_ID
 Content-Type: application/json
 
 {"fecha": "MANANA"}
+
+# ─── E2 · Metas y progreso semanal ───
+# Ejecutar contra la base de desarrollo (MONGODB_DB=diario_gamer_dev), en este orden.
+# Datos previos (con las peticiones de arriba):
+#   VIDEOJUEGO_SIN_PARTIDAS_ID  juego «jugando» sin partidas
+#   VIDEOJUEGO_ID               juego «jugando» con al menos 5 partidas en días distintos y un día sin jugar en medio (racha rota)
+#   VIDEOJUEGO_COMPLETADO_ID    juego en estado «completado»
+# META_ID y META_ID_2 son los ids que devuelven los POST de metas.
+
+### H-01.1: crear meta → 201
+POST http://localhost:3000/api/metas
+Content-Type: application/json
+
+{"videojuego": "VIDEOJUEGO_ID", "horasSemanales": 5, "diasPorSemana": 4, "hitos": [{"descripcion": "  Llegar al 25 % ", "porcentajeObjetivo": 25}, {"descripcion": "Llegar al 50 %", "porcentajeObjetivo": 50}]}
+
+### H-01.6: segunda meta activa → 409 conflicto
+POST http://localhost:3000/api/metas
+Content-Type: application/json
+
+{"videojuego": "VIDEOJUEGO_ID", "horasSemanales": 8, "diasPorSemana": 4}
+
+### H-01.7: crear meta en juego completado → 409 conflicto
+POST http://localhost:3000/api/metas
+Content-Type: application/json
+
+{"videojuego": "VIDEOJUEGO_COMPLETADO_ID", "horasSemanales": 5, "diasPorSemana": 4}
+
+### H-01.7: crear meta en juego pausado → 201 (antes: PUT del juego sin partidas con {"estado": "pausado"})
+POST http://localhost:3000/api/metas
+Content-Type: application/json
+
+{"videojuego": "VIDEOJUEGO_SIN_PARTIDAS_ID", "horasSemanales": 5, "diasPorSemana": 4}
+
+### Meta con videojuego inexistente → 404 referencia_inexistente
+POST http://localhost:3000/api/metas
+Content-Type: application/json
+
+{"videojuego": "65afffffffffffffffffffff", "horasSemanales": 5, "diasPorSemana": 4}
+
+### Meta con horas fuera de rango → 400 validacion con detalles
+POST http://localhost:3000/api/metas
+Content-Type: application/json
+
+{"videojuego": "VIDEOJUEGO_ID", "horasSemanales": 0, "diasPorSemana": 4}
+
+### Obtener meta con id mal formado → 400 id_mal_formado
+GET http://localhost:3000/api/metas/abc
+
+### Obtener meta inexistente → 404 no_encontrado
+GET http://localhost:3000/api/metas/65afffffffffffffffffffff
+
+### H-02.7: crear meta con partidas previas y consultar progreso → porcentajeHoras según las horas ya jugadas esta semana
+GET http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID/progreso-semanal
+
+### H-06.1: PUT meta a 4 h → 200, la misma meta (videojuego se ignora)
+PUT http://localhost:3000/api/metas/META_ID
+Content-Type: application/json
+
+{"horasSemanales": 4, "videojuego": "65afffffffffffffffffffff"}
+
+### H-06.1: progreso tras editar → porcentajeHoras calculado con 4 h
+GET http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID/progreso-semanal
+
+### H-02.4: editar meta a 4 h y consultar progreso → 100 (si esta semana hay 4 h o más jugadas)
+GET http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID/progreso-semanal
+
+### H-06.2: desactivar meta → 200 activa false
+PATCH http://localhost:3000/api/metas/META_ID/desactivar
+
+### H-05.5: progreso tras desactivar la meta → hitos []
+GET http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID/progreso-semanal
+
+### H-06.3: progreso sin meta activa → meta null y porcentajeHoras null
+GET http://localhost:3000/api/videojuegos/VIDEOJUEGO_SIN_PARTIDAS_ID/progreso-semanal
+
+### H-06.2: DELETE meta → 404 ruta no encontrada
+DELETE http://localhost:3000/api/metas/META_ID
+
+### Crear una segunda meta (META_ID_2) en el mismo juego → 201
+POST http://localhost:3000/api/metas
+Content-Type: application/json
+
+{"videojuego": "VIDEOJUEGO_ID", "horasSemanales": 8, "diasPorSemana": 5}
+
+### H-06.5: reactivar con otra meta activa → 409 conflicto
+PUT http://localhost:3000/api/metas/META_ID
+Content-Type: application/json
+
+{"activa": true}
+
+### H-06.2: listar metas del juego → la inactiva con horasSemanales, diasPorSemana y createdAt
+GET http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID/metas
+
+### H-06.7: listar metas del juego → total 2, una activa y una inactiva
+GET http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID/metas
+
+### Desactivar META_ID_2 y pasar el juego a pausado (preparación de H-06.4)
+PATCH http://localhost:3000/api/metas/META_ID_2/desactivar
+
+###
+PUT http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID
+Content-Type: application/json
+
+{"estado": "pausado"}
+
+### H-06.4: reactivar meta en juego pausado → 200 activa true
+PUT http://localhost:3000/api/metas/META_ID
+Content-Type: application/json
+
+{"activa": true}
+
+### H-06.6: reactivar meta en juego completado → 409 conflicto (primero: POST /api/metas en el juego completado con "activa": false → 201)
+PUT http://localhost:3000/api/metas/META_ID_DEL_JUEGO_COMPLETADO
+Content-Type: application/json
+
+{"activa": true}
+
+### H-07.1: juego a abandonado y obtener su meta → activa true
+PUT http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID
+Content-Type: application/json
+
+{"estado": "abandonado"}
+
+###
+GET http://localhost:3000/api/metas/META_ID
+
+### H-07.2: progreso de juego completado o abandonado con meta activa → 200 con meta
+GET http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID/progreso-semanal
+
+### T-20: progreso de un juego inexistente → 404
+GET http://localhost:3000/api/videojuegos/65afffffffffffffffffffff/progreso-semanal
+
+### T-20: progreso con id mal formado → 400
+GET http://localhost:3000/api/videojuegos/abc/progreso-semanal
+
+### D-P5.5: resumen de un juego con partidas (comparar con la respuesta guardada antes del cambio)
+GET http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID/resumen
+
+### D-P5.5: resumen de un juego sin partidas → {"totalPartidas":0,"horasTotales":0,"ultimaPartida":null,"porcentajeAvanceActual":0}
+GET http://localhost:3000/api/videojuegos/VIDEOJUEGO_SIN_PARTIDAS_ID/resumen
+
+### H-08.1: eliminar juego con 2 metas y sus partidas → 204
+DELETE http://localhost:3000/api/videojuegos/VIDEOJUEGO_ID
+
+### H-08.1: obtener cada meta del juego eliminado → 404
+GET http://localhost:3000/api/metas/META_ID
+
+###
+GET http://localhost:3000/api/metas/META_ID_2
+
+### H-08.1: obtener una partida del juego eliminado → 404
+GET http://localhost:3000/api/partidas/PARTIDA_ID
