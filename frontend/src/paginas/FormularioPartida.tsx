@@ -1,12 +1,16 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { listarVideojuegos } from '../api/videojuegosApi';
-import { crearPartida } from '../api/partidasApi';
+import { actualizarPartida, crearPartida, obtenerPartida } from '../api/partidasApi';
 import { EstadoCarga } from '../components/EstadoCarga';
 import { hoyISO, mensajeDeError } from '../tipos';
 import type { PartidaInput, Videojuego } from '../tipos';
 
+/** Registrar partida (/partidas/nueva) y editar partida (/partidas/:id/editar, T-30). */
 export function FormularioPartida() {
+  const { id } = useParams();
+  const editando = Boolean(id);
+  const [nombreJuego, setNombreJuego] = useState('');
   const [query] = useSearchParams();
   const preseleccion = query.get('videojuegoId') ?? '';
   const navigate = useNavigate();
@@ -29,6 +33,36 @@ export function FormularioPartida() {
     setCargando(true);
     setError(null);
     setFallida(false);
+    if (id) {
+      // Modo edición: el juego viene poblado y no se puede cambiar (supuesto 6).
+      obtenerPartida(id)
+        .then((partida) => {
+          if (!vigente) return;
+          if (!partida.videojuego || typeof partida.videojuego === 'string') {
+            throw new Error('No se encontró el juego de esta partida.');
+          }
+          setNombreJuego(partida.videojuego.nombre);
+          setForm({
+            videojuego: partida.videojuego._id,
+            // La API devuelve fecha-hora ISO y el backend solo acepta AAAA-MM-DD (D-P2.2).
+            fecha: partida.fecha.slice(0, 10),
+            duracionMinutos: partida.duracionMinutos,
+            porcentajeAvance: partida.porcentajeAvance,
+            notas: partida.notas ?? '',
+          });
+        })
+        .catch((e: unknown) => {
+          if (!vigente) return;
+          setError(mensajeDeError(e, 'No se pudo cargar la partida.'));
+          setFallida(true);
+        })
+        .finally(() => {
+          if (vigente) setCargando(false);
+        });
+      return () => {
+        vigente = false;
+      };
+    }
     listarVideojuegos()
       .then((lista) => {
         if (!vigente) return;
@@ -47,7 +81,7 @@ export function FormularioPartida() {
     return () => {
       vigente = false;
     };
-  }, [preseleccion, recarga]);
+  }, [id, preseleccion, recarga]);
 
   async function enviar(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -66,21 +100,28 @@ export function FormularioPartida() {
     }
     setGuardando(true);
     try {
-      await crearPartida({ ...form, notas: form.notas.trim() });
+      if (id) {
+        const { fecha, duracionMinutos, porcentajeAvance } = form;
+        await actualizarPartida(id, { fecha, duracionMinutos, porcentajeAvance, notas: form.notas.trim() });
+      } else {
+        await crearPartida({ ...form, notas: form.notas.trim() });
+      }
       // Volver al detalle: el resumen se recalcula en el backend con la partida nueva.
       navigate(`/videojuegos/${form.videojuego}`);
     } catch (err) {
-      setError(mensajeDeError(err, 'No se pudo registrar la partida.'));
+      setError(mensajeDeError(err, editando ? 'No se pudo guardar la partida.' : 'No se pudo registrar la partida.'));
       setGuardando(false);
     }
   }
+
+  const titulo = editando ? 'Editar partida' : 'Registrar partida';
 
   if (cargando) return <EstadoCarga cargando error={null} />;
 
   if (fallida) {
     return (
       <section className="pagina-formulario">
-        <h1>Registrar partida</h1>
+        <h1>{titulo}</h1>
         <EstadoCarga cargando={false} error={error} onReintentar={() => setRecarga((x) => x + 1)} />
       </section>
     );
@@ -88,12 +129,15 @@ export function FormularioPartida() {
 
   return (
     <section className="pagina-formulario">
-      <Link to={preseleccion ? `/videojuegos/${preseleccion}` : '/partidas'} className="volver">
+      <Link
+        to={editando ? `/videojuegos/${form.videojuego}` : preseleccion ? `/videojuegos/${preseleccion}` : '/partidas'}
+        className="volver"
+      >
         Volver
       </Link>
-      <h1>Registrar partida</h1>
+      <h1>{titulo}</h1>
 
-      {juegos.length === 0 ? (
+      {!editando && juegos.length === 0 ? (
         <p className="estado estado-vacio">
           Para registrar una partida primero necesitas un juego.{' '}
           <Link to="/videojuegos/nuevo">Agrega tu primer juego.</Link>
@@ -109,17 +153,23 @@ export function FormularioPartida() {
             <fieldset disabled={guardando}>
               <label className="campo">
                 Juego
-                <select
-                  required
-                  value={form.videojuego}
-                  onChange={(e) => setForm({ ...form, videojuego: e.target.value })}
-                >
-                  {juegos.map((v) => (
-                    <option key={v._id} value={v._id}>
-                      {v.nombre}
-                    </option>
-                  ))}
-                </select>
+                {editando ? (
+                  <select disabled value={form.videojuego}>
+                    <option value={form.videojuego}>{nombreJuego}</option>
+                  </select>
+                ) : (
+                  <select
+                    required
+                    value={form.videojuego}
+                    onChange={(e) => setForm({ ...form, videojuego: e.target.value })}
+                  >
+                    {juegos.map((v) => (
+                      <option key={v._id} value={v._id}>
+                        {v.nombre}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </label>
 
               <div className="fila">
@@ -166,9 +216,15 @@ export function FormularioPartida() {
                 />
               </label>
 
-              <button type="submit" className="boton">
-                {guardando ? 'Registrando…' : 'Registrar partida'}
-              </button>
+              {editando ? (
+                <button type="submit" className="boton boton-secundario">
+                  {guardando ? 'Guardando…' : 'Guardar partida'}
+                </button>
+              ) : (
+                <button type="submit" className="boton">
+                  {guardando ? 'Registrando…' : 'Registrar partida'}
+                </button>
+              )}
             </fieldset>
           </form>
         </>

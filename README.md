@@ -191,7 +191,7 @@ Middlewares: `requestId` (id único por petición, también en la cabecera `X-Re
 
 ## 6. Frontend
 
-React + TypeScript + Vite + React Router. Ocho rutas en seis pantallas:
+React + TypeScript + Vite + React Router. Nueve rutas en seis pantallas:
 
 | Ruta | Pantalla |
 |---|---|
@@ -200,6 +200,7 @@ React + TypeScript + Vite + React Router. Ocho rutas en seis pantallas:
 | `/videojuegos/nuevo` y `/videojuegos/:id/editar` | Formulario crear/editar videojuego, con editor de logros |
 | `/partidas` | Lista de todas las partidas (con el nombre del juego por `populate`) |
 | `/partidas/nueva` | Formulario de nueva partida; al guardar vuelve al detalle del juego con el resumen actualizado |
+| `/partidas/:id/editar` | El mismo formulario en modo edición (el juego no se cambia); al guardar vuelve al detalle del juego |
 | `/videojuegos/:id/meta/nueva` y `/metas/:id/editar` | Formulario crear/editar meta semanal (horas, días e hitos); al guardar vuelve al detalle del juego |
 
 - Las páginas nunca llaman a `fetch`: usan `src/api/videojuegosApi.ts` y `src/api/partidasApi.ts`, que pasan por `src/api/http.ts`.

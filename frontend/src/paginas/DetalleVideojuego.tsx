@@ -307,6 +307,9 @@ export function DetalleVideojuego() {
                       <td>{p.porcentajeAvance}%</td>
                       <td>{p.notas || '—'}</td>
                       <td>
+                        <Link to={`/partidas/${p._id}/editar`} className="boton boton-secundario">
+                          Editar
+                        </Link>{' '}
                         <button
                           type="button"
                           className="boton-texto"

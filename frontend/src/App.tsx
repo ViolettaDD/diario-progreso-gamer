@@ -36,6 +36,7 @@ export default function App() {
           <Route path="/videojuegos/:id/editar" element={<FormularioVideojuego />} />
           <Route path="/partidas" element={<ListaPartidas />} />
           <Route path="/partidas/nueva" element={<FormularioPartida />} />
+          <Route path="/partidas/:id/editar" element={<FormularioPartida />} />
           <Route path="/videojuegos/:videojuegoId/meta/nueva" element={<FormularioMeta />} />
           <Route path="/metas/:metaId/editar" element={<FormularioMeta />} />
           <Route
