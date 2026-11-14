@@ -299,3 +299,5 @@ textarea { resize: vertical; }
 .meta-aviso { border: medium solid var(--acento); color: var(--tinta); }
 /* E2 · Formulario de meta (T-27). El editor de hitos reutiliza .editor-logros y .fila-logro. */
 .meta-limite { color: var(--tinta-suave); }
+/* E2 · Historial de metas (T-28). Cada fila reutiliza .encabezado-panel y el panel, .progreso-seccion. */
+.historial-lista { list-style: none; padding: 0; margin: 0; }

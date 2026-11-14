@@ -5,9 +5,10 @@ import { eliminarPartida, listarPartidasDeVideojuego } from '../api/partidasApi'
 import { EstadoCarga } from '../components/EstadoCarga';
 import { BloqueResumen } from '../components/BloqueResumen';
 import { SeccionProgreso } from '../components/SeccionProgreso';
-import { obtenerProgresoSemanal } from '../api/metasApi';
+import { HistorialMetas } from '../components/HistorialMetas';
+import { actualizarMeta, desactivarMeta, listarMetasDeVideojuego, obtenerProgresoSemanal } from '../api/metasApi';
 import { ETIQUETAS_ESTADO, ETIQUETAS_GENERO, ETIQUETAS_PLATAFORMA, formatearFecha, mensajeDeError } from '../tipos';
-import type { Logro, Partida, ProgresoSemanal, Resumen, Videojuego } from '../tipos';
+import type { Logro, Meta, Partida, ProgresoSemanal, Resumen, Videojuego } from '../tipos';
 
 export function DetalleVideojuego() {
   const { id = '' } = useParams();
@@ -69,7 +70,29 @@ export function DetalleVideojuego() {
     };
   }, [id, recarga, recargaProgreso]);
 
-  /** Vuelve a pedir resumen, partidas y progreso semanal al backend (tras eliminar una partida, H-02.9). */
+  /* Metas del juego (T-28): activas e inactivas, para «Editar/Desactivar meta» y «Metas anteriores». */
+  const [metas, setMetas] = useState<Meta[]>([]);
+  const [errorMetas, setErrorMetas] = useState<string | null>(null);
+  const [errorHistorial, setErrorHistorial] = useState<string | null>(null);
+
+  useEffect(() => {
+    let vigente = true;
+    setErrorMetas(null);
+    listarMetasDeVideojuego(id)
+      .then((m) => {
+        if (vigente) setMetas(m);
+      })
+      .catch((e: unknown) => {
+        if (vigente) setErrorMetas(mensajeDeError(e, 'No se pudieron cargar tus metas.'));
+      });
+    return () => {
+      vigente = false;
+    };
+  }, [id, recarga, recargaProgreso]);
+
+  const metaActiva = metas.find((m) => m.activa) ?? null;
+
+  /** Vuelve a pedir resumen, partidas, progreso semanal y metas al backend (tras eliminar una partida, H-02.9). */
   async function refrescarProgreso() {
     setRecargaProgreso((x) => x + 1);
     const [r, p] = await Promise.all([obtenerResumen(id), listarPartidasDeVideojuego(id)]);
@@ -98,6 +121,34 @@ export function DetalleVideojuego() {
       await refrescarProgreso();
     } catch (e) {
       setAviso(mensajeDeError(e, 'No se pudo eliminar la partida.'));
+    } finally {
+      setOcupado(false);
+    }
+  }
+
+  async function desactivar() {
+    if (!juego || !metaActiva) return;
+    if (!window.confirm(`¿Desactivar la meta de ${juego.nombre}?`)) return;
+    setOcupado(true);
+    setAviso(null);
+    try {
+      await desactivarMeta(metaActiva._id);
+      setRecargaProgreso((x) => x + 1);
+    } catch (e) {
+      setAviso(mensajeDeError(e, 'No se pudo desactivar la meta.'));
+    } finally {
+      setOcupado(false);
+    }
+  }
+
+  async function reactivar(meta: Meta) {
+    setOcupado(true);
+    setErrorHistorial(null);
+    try {
+      await actualizarMeta(meta._id, { activa: true });
+      setRecargaProgreso((x) => x + 1);
+    } catch (e) {
+      setErrorHistorial(mensajeDeError(e, 'No se pudo reactivar la meta.'));
     } finally {
       setOcupado(false);
     }
@@ -176,6 +227,18 @@ export function DetalleVideojuego() {
         error={errorProgreso}
         onReintentar={() => setRecargaProgreso((x) => x + 1)}
         estadoJuego={juego.estado}
+        metaActivaId={metaActiva?._id ?? null}
+        onDesactivar={desactivar}
+        ocupado={ocupado}
+      />
+
+      <HistorialMetas
+        metas={metas}
+        error={errorMetas}
+        onReintentar={() => setRecargaProgreso((x) => x + 1)}
+        errorAccion={errorHistorial}
+        onReactivar={reactivar}
+        ocupado={ocupado}
       />
 
       <div className="columnas">

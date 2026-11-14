@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { listarMetasDeVideojuego } from '../api/metasApi';
 import { EstadoCarga } from './EstadoCarga';
 import { formatearHoras } from '../tipos';
 import type { Estado, ProgresoSemanal } from '../tipos';
@@ -34,35 +32,28 @@ interface Props {
   onReintentar: () => void;
   /** Estado del juego, para el aviso de RN-19 (T-26). */
   estadoJuego: Estado;
+  /** Id de la meta activa, de la lista de metas que carga el detalle (T-28). */
+  metaActivaId: string | null;
+  /** Pide confirmación y desactiva la meta activa (T-28). */
+  onDesactivar: () => void;
+  ocupado: boolean;
 }
 
 /**
  * Sección «Esta semana» del detalle (T-25). Solo muestra lo que calcula el backend:
  * la única operación es Math.round(porcentajeHoras / 10) para los segmentos de la barra.
  */
-export function SeccionProgreso({ progreso, cargando, error, onReintentar, estadoJuego }: Props) {
+export function SeccionProgreso({
+  progreso,
+  cargando,
+  error,
+  onReintentar,
+  estadoJuego,
+  metaActivaId,
+  onDesactivar,
+  ocupado,
+}: Props) {
   const { id: videojuegoId = '' } = useParams();
-  const hayMeta = progreso?.meta != null;
-  // Id de la meta activa para «Editar meta»: el progreso semanal no lo trae (T-27).
-  const [metaActivaId, setMetaActivaId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!hayMeta) {
-      setMetaActivaId(null);
-      return;
-    }
-    let vigente = true;
-    listarMetasDeVideojuego(videojuegoId)
-      .then((metas) => {
-        if (vigente) setMetaActivaId(metas.find((m) => m.activa)?._id ?? null);
-      })
-      .catch(() => {
-        if (vigente) setMetaActivaId(null);
-      });
-    return () => {
-      vigente = false;
-    };
-  }, [videojuegoId, hayMeta]);
 
   return (
     <section className="panel progreso-seccion" aria-labelledby="titulo-progreso">
@@ -75,6 +66,8 @@ export function SeccionProgreso({ progreso, cargando, error, onReintentar, estad
           estadoJuego={estadoJuego}
           videojuegoId={videojuegoId}
           metaActivaId={metaActivaId}
+          onDesactivar={onDesactivar}
+          ocupado={ocupado}
         />
       )}
     </section>
@@ -86,9 +79,18 @@ interface PropsContenido {
   estadoJuego: Estado;
   videojuegoId: string;
   metaActivaId: string | null;
+  onDesactivar: () => void;
+  ocupado: boolean;
 }
 
-function ContenidoProgreso({ progreso, estadoJuego, videojuegoId, metaActivaId }: PropsContenido) {
+function ContenidoProgreso({
+  progreso,
+  estadoJuego,
+  videojuegoId,
+  metaActivaId,
+  onDesactivar,
+  ocupado,
+}: PropsContenido) {
   const { meta, porcentajeHoras } = progreso;
   const conMeta = meta !== null && porcentajeHoras !== null;
   const juegoTerminado = estadoJuego === 'completado' || estadoJuego === 'abandonado';
@@ -180,6 +182,9 @@ function ContenidoProgreso({ progreso, estadoJuego, videojuegoId, metaActivaId }
           <Link to={`/metas/${metaActivaId}/editar`} className="boton boton-secundario">
             Editar meta
           </Link>
+          <button type="button" className="boton boton-secundario" disabled={ocupado} onClick={onDesactivar}>
+            Desactivar meta
+          </button>
         </div>
       )}
 
