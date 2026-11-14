@@ -191,7 +191,7 @@ Middlewares: `requestId` (id único por petición, también en la cabecera `X-Re
 
 ## 6. Frontend
 
-React + TypeScript + Vite + React Router. Seis rutas en cinco pantallas:
+React + TypeScript + Vite + React Router. Ocho rutas en seis pantallas:
 
 | Ruta | Pantalla |
 |---|---|
@@ -200,6 +200,7 @@ React + TypeScript + Vite + React Router. Seis rutas en cinco pantallas:
 | `/videojuegos/nuevo` y `/videojuegos/:id/editar` | Formulario crear/editar videojuego, con editor de logros |
 | `/partidas` | Lista de todas las partidas (con el nombre del juego por `populate`) |
 | `/partidas/nueva` | Formulario de nueva partida; al guardar vuelve al detalle del juego con el resumen actualizado |
+| `/videojuegos/:id/meta/nueva` y `/metas/:id/editar` | Formulario crear/editar meta semanal (horas, días e hitos); al guardar vuelve al detalle del juego |
 
 - Las páginas nunca llaman a `fetch`: usan `src/api/videojuegosApi.ts` y `src/api/partidasApi.ts`, que pasan por `src/api/http.ts`.
 - Cada pantalla que depende de la API muestra los estados **cargando, error (con botón Reintentar) y vacío** mediante `components/EstadoCarga.tsx`.
@@ -227,7 +228,7 @@ frontend/
   src/
     api/                    http.ts, videojuegosApi.ts, partidasApi.ts
     components/             EstadoCarga, BloqueResumen
-    paginas/                las 5 pantallas
+    paginas/                las 6 pantallas
     tipos.ts                tipos compartidos y utilidades
   .env.example
 ```

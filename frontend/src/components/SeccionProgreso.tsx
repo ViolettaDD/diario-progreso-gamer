@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { listarMetasDeVideojuego } from '../api/metasApi';
 import { EstadoCarga } from './EstadoCarga';
 import { formatearHoras } from '../tipos';
 import type { Estado, ProgresoSemanal } from '../tipos';
@@ -38,19 +41,54 @@ interface Props {
  * la única operación es Math.round(porcentajeHoras / 10) para los segmentos de la barra.
  */
 export function SeccionProgreso({ progreso, cargando, error, onReintentar, estadoJuego }: Props) {
+  const { id: videojuegoId = '' } = useParams();
+  const hayMeta = progreso?.meta != null;
+  // Id de la meta activa para «Editar meta»: el progreso semanal no lo trae (T-27).
+  const [metaActivaId, setMetaActivaId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!hayMeta) {
+      setMetaActivaId(null);
+      return;
+    }
+    let vigente = true;
+    listarMetasDeVideojuego(videojuegoId)
+      .then((metas) => {
+        if (vigente) setMetaActivaId(metas.find((m) => m.activa)?._id ?? null);
+      })
+      .catch(() => {
+        if (vigente) setMetaActivaId(null);
+      });
+    return () => {
+      vigente = false;
+    };
+  }, [videojuegoId, hayMeta]);
+
   return (
     <section className="panel progreso-seccion" aria-labelledby="titulo-progreso">
       <h2 id="titulo-progreso">Esta semana</h2>
       {error || !progreso ? (
         <EstadoCarga cargando={cargando} error={error} onReintentar={onReintentar} />
       ) : (
-        <ContenidoProgreso progreso={progreso} estadoJuego={estadoJuego} />
+        <ContenidoProgreso
+          progreso={progreso}
+          estadoJuego={estadoJuego}
+          videojuegoId={videojuegoId}
+          metaActivaId={metaActivaId}
+        />
       )}
     </section>
   );
 }
 
-function ContenidoProgreso({ progreso, estadoJuego }: { progreso: ProgresoSemanal; estadoJuego: Estado }) {
+interface PropsContenido {
+  progreso: ProgresoSemanal;
+  estadoJuego: Estado;
+  videojuegoId: string;
+  metaActivaId: string | null;
+}
+
+function ContenidoProgreso({ progreso, estadoJuego, videojuegoId, metaActivaId }: PropsContenido) {
   const { meta, porcentajeHoras } = progreso;
   const conMeta = meta !== null && porcentajeHoras !== null;
   const juegoTerminado = estadoJuego === 'completado' || estadoJuego === 'abandonado';
@@ -137,8 +175,21 @@ function ContenidoProgreso({ progreso, estadoJuego }: { progreso: ProgresoSemana
         </>
       )}
 
+      {conMeta && metaActivaId && (
+        <div className="acciones">
+          <Link to={`/metas/${metaActivaId}/editar`} className="boton boton-secundario">
+            Editar meta
+          </Link>
+        </div>
+      )}
+
       {!conMeta && (
-        <p className="estado estado-vacio">Aún no tienes una meta para este juego. Crea una para seguir tu semana.</p>
+        <div className="estado estado-vacio">
+          <p>Aún no tienes una meta para este juego. Crea una para seguir tu semana.</p>
+          <Link to={`/videojuegos/${videojuegoId}/meta/nueva`} className="boton boton-secundario">
+            Crear meta
+          </Link>
+        </div>
       )}
     </>
   );

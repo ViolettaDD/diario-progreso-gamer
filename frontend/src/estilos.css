@@ -297,3 +297,5 @@ textarea { resize: vertical; }
 .hito-alcanzado { color: var(--meta-ok); }
 .hito-pendiente { color: var(--meta-pendiente); }
 .meta-aviso { border: medium solid var(--acento); color: var(--tinta); }
+/* E2 · Formulario de meta (T-27). El editor de hitos reutiliza .editor-logros y .fila-logro. */
+.meta-limite { color: var(--tinta-suave); }
