@@ -214,6 +214,7 @@ Las rutas son relativas a `frontend/src/`, salvo que se indique otra cosa.
 8. **Datos en Atlas.** H-02.5, H-04.6 y H-06.2 necesitan insertar o editar datos en Atlas, porque la API ya no acepta fechas futuras ni deja fijar `createdAt`.
 9. **Revisiones en días concretos.** H-02.2 y H-03.2 solo se pueden revisar un domingo por la noche y el lunes siguiente. Si no hay ocasión antes de la entrega, quedan cubiertas por los tests de backend con los mismos ids y la revisión visual queda pendiente en la auditoría.
 10. **`--tinta-oscura`.** Se crea en T-24 aunque ninguna pantalla de esta spec la use, porque DESIGN.md la prevé. Queda anotada como variable sin uso dentro de P6 en el backlog.
+11. **Prop `estadoJuego`.** T-25 declara en `SeccionProgreso` la prop `estadoJuego` y `DetalleVideojuego.tsx` se la pasa. T-26 solo la usa para el aviso de juego terminado y no modifica `DetalleVideojuego.tsx`, como indica la tabla.
 
 **Puntos abiertos**
 
