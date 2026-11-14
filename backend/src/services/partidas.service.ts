@@ -2,8 +2,24 @@ import { Partida } from '../modelos/Partida.model';
 import { Videojuego } from '../modelos/Videojuego.model';
 import { ApiError } from '../apiError';
 import { elegirCampos } from '../validacion';
+import { esFechaCalendario, esFutura, hoyEnEcuador } from '../dominio/fechas';
 
 const CAMPOS = ['videojuego', 'fecha', 'duracionMinutos', 'porcentajeAvance', 'notas'] as const;
+
+/**
+ * La fecha de una partida es un día de calendario 'AAAA-MM-DD' (se guarda a medianoche UTC)
+ * y no puede ser posterior al «hoy» de America/Guayaquil. Si no viene, decide el esquema.
+ */
+function validarFecha(fecha: unknown) {
+  if (fecha === undefined) return;
+  if (!esFechaCalendario(fecha)) {
+    throw new ApiError(400, 'La fecha debe ser un día de calendario válido con formato AAAA-MM-DD');
+  }
+  const hoy = hoyEnEcuador(new Date());
+  if (esFutura(fecha, hoy)) {
+    throw new ApiError(400, `La fecha no puede ser posterior a hoy (${hoy})`);
+  }
+}
 
 /** Validación de referencia: el videojuego indicado debe existir (404 si no existe). */
 async function comprobarVideojuegoReferenciado(id: string) {
@@ -33,7 +49,9 @@ export async function obtener(id: string) {
 }
 
 export async function crear(body: unknown) {
-  const partida = new Partida(elegirCampos(body, CAMPOS));
+  const datos = elegirCampos(body, CAMPOS);
+  validarFecha(datos.fecha); // formato AAAA-MM-DD y no futura → 400
+  const partida = new Partida(datos);
   await partida.validate(); // 1) validación de esquema → 400
   await comprobarVideojuegoReferenciado(String(partida.videojuego)); // 2) referencia inexistente → 404
   return partida.save();
@@ -41,6 +59,7 @@ export async function crear(body: unknown) {
 
 export async function actualizar(id: string, body: unknown) {
   const cambios = elegirCampos(body, CAMPOS, true);
+  validarFecha(cambios.fecha); // formato AAAA-MM-DD y no futura → 400
   if (cambios.videojuego !== undefined) {
     await comprobarVideojuegoReferenciado(String(cambios.videojuego));
   }

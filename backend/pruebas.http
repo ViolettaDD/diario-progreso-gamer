@@ -70,3 +70,43 @@ Content-Type: application/json
 
 ### ERROR 4 · Error inesperado → 500 "interno" (requiere PERMITIR_ERROR_PRUEBA=true en el .env local)
 GET http://localhost:3000/api/debug/error
+
+# ─── E2 · Deuda P2: la fecha de una partida es un día de calendario y no puede ser futura ───
+# Ejecutar contra la base de desarrollo (MONGODB_DB=diario_gamer_dev), nunca contra la de Render.
+# Reemplaza HOY por la fecha de hoy en Ecuador y MANANA por el día siguiente, ambas en formato AAAA-MM-DD.
+
+### D-P2.1: registrar partida con la fecha de hoy → 201
+POST http://localhost:3000/api/partidas
+Content-Type: application/json
+
+{"videojuego": "VIDEOJUEGO_ID", "fecha": "HOY", "duracionMinutos": 15, "porcentajeAvance": 50}
+
+### D-P2.2: registrar partida con hora → 400 validacion
+POST http://localhost:3000/api/partidas
+Content-Type: application/json
+
+{"videojuego": "VIDEOJUEGO_ID", "fecha": "2026-11-12T10:00:00Z", "duracionMinutos": 15, "porcentajeAvance": 50}
+
+### D-P2.2: editar partida con fecha "ayer" → 400 validacion
+PUT http://localhost:3000/api/partidas/PARTIDA_ID
+Content-Type: application/json
+
+{"fecha": "ayer"}
+
+### D-P2.2: editar partida con fecha inexistente 2026-02-30 → 400 validacion
+PUT http://localhost:3000/api/partidas/PARTIDA_ID
+Content-Type: application/json
+
+{"fecha": "2026-02-30"}
+
+### D-P2.3: registrar partida con fecha futura → 400 validacion
+POST http://localhost:3000/api/partidas
+Content-Type: application/json
+
+{"videojuego": "VIDEOJUEGO_ID", "fecha": "MANANA", "duracionMinutos": 15, "porcentajeAvance": 50}
+
+### D-P2.3: editar partida a fecha futura → 400 validacion
+PUT http://localhost:3000/api/partidas/PARTIDA_ID
+Content-Type: application/json
+
+{"fecha": "MANANA"}
