@@ -243,6 +243,8 @@ Las rutas son relativas a `backend/`, salvo el README.
 10. **Test de humo.** El de T-01 queda en el repositorio y no se borra al cerrar la épica.
 11. **Qué es reactivar.** «Reactivar» es cambiar `activa` de `false` a `true`. Un `PUT` con `activa: true` sobre una meta que ya está activa no es reactivar y no dispara RN-07 ni RN-09. Al contar «otra meta activa» se excluye la propia meta.
 12. **Metas creadas inactivas.** Crear una meta con `activa: false` no aplica RN-07 ni RN-09, porque las dos reglas hablan de metas activas.
+13. **Hitos sin `_id`.** Los hitos se guardan sin `_id` propio; la respuesta solo lleva `descripcion` y `porcentajeObjetivo`.
+14. **Mensaje del 409 por E11000.** El 409 por error E11000 (índice único de meta activa) usa el mensaje «El cambio choca con un dato que ya existe. Revisa si el juego ya tiene una meta activa». Los otros dos 409 conservan los mensajes de la spec.
 
 **Puntos abiertos.**
 
