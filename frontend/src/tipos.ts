@@ -109,10 +109,19 @@ export function formatearFecha(iso: string): string {
   });
 }
 
-/** Fecha local de hoy en formato YYYY-MM-DD (valor por defecto del formulario de partida). */
+/**
+ * Fecha de hoy en America/Guayaquil, en formato AAAA-MM-DD (valor por defecto del formulario de partida).
+ * No depende de la zona horaria del equipo: el «hoy» del Diario siempre es el de Ecuador (D-P2.5).
+ */
 export function hoyISO(): string {
-  const ahora = new Date();
-  return new Date(ahora.getTime() - ahora.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  const partes = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Guayaquil',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(new Date());
+  const valor = (tipo: Intl.DateTimeFormatPartTypes) => partes.find((p) => p.type === tipo)?.value ?? '';
+  return `${valor('year')}-${valor('month')}-${valor('day')}`;
 }
 
 export function mensajeDeError(e: unknown, porDefecto: string): string {
