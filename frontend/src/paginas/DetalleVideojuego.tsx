@@ -156,8 +156,9 @@ export function DetalleVideojuego() {
 
   async function borrarJuego() {
     if (!juego) return;
-    const extra = partidas.length ? ` y sus ${partidas.length} partida(s)` : '';
-    if (!window.confirm(`¿Eliminar "${juego.nombre}"${extra}? No se puede deshacer.`)) return;
+    // RN-08: la confirmación nombra lo que se borra en cascada (metas y partidas).
+    const mensaje = `¿Eliminar "${juego.nombre}", sus ${metas.length} meta(s) y sus ${partidas.length} partida(s)? No se puede deshacer.`;
+    if (!window.confirm(mensaje)) return;
     setOcupado(true);
     setAviso(null);
     try {
