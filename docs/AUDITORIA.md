@@ -102,6 +102,18 @@ Se pueden hacer con los datos sembrados el sábado 14 mientras dure la semana de
 | R7 | H-02.6, H-03.3, H-07.2, H-07.3, H-06.3 | «H-02.6a y H-03.3a · Sin meta»: «4 h esta semana», «3 días jugados», sin barra ni «%» y con el estado vacío. «H-02.6b, H-03.3b y H-04.7 · Meta sin partidas»: «0 h de 5 h», «0 %» y «0 de 4 días». «H-07.2 · Completado con meta»: «2 h de 6 h», «33 %», «1 de 3 días», el hito y el aviso «completado»; después, «Desactivar meta» → el aviso desaparece y quedan sin barra, sin «%» ni «de N» y con el estado vacío |
 | R8 | H-09.2, H-09.3, H-09.4, H-02.9 (al editar) | «H-09.3 · Hito con avance 40»: editar la partida del 13/11 a avance 60 → «Alcanzado». «H-09.4 · Corregir duración»: editar la de 300 min a 30 → baja 4,5 h y sigue «Racha actual 4 días», sin F5. «H-09.1 y H-09.2 · Fecha equivocada»: editar con fecha de mañana → mensaje de fecha futura en rojo. En «Partidas», cada fila tiene «Editar» |
 
+## T-31 · Despliegue en Render y cierre (2026-11-16)
+
+| Comprobación | Resultado | Evidencia |
+| --- | --- | --- |
+| API y frontend desplegados en Render con E2 | ✓ según la usuaria | Las capturas siguientes son de `diario-gamer-violettadd.onrender.com` |
+| «Esta semana» funciona en producción | ✓ | [`docs/evidencia/CreaJuegoPrueba.png`](evidencia/CreaJuegoPrueba.png): juego «Prueba E2» con «Semana del 16 al 22 de noviembre», «2,8 h de 6 h», «47 %», «1 de 4 días» y racha 1 |
+| «Hoy» en hora de Ecuador en producción | ✓ | [`docs/evidencia/RegistroPartidaPrueba.png`](evidencia/RegistroPartidaPrueba.png): «Registrar partida» en la URL de Render propone 16/11/2026 |
+| Confirmación de borrado con metas y partidas en producción | ✓ | [`docs/evidencia/T-21.png`](evidencia/T-21.png): «¿Eliminar "Prueba E2", sus 1 meta(s) y sus 2 partida(s)? No se puede deshacer.». La captura no muestra el borrado en sí |
+| Índice parcial único `videojuego_1` en `metas` | ✓ en `diario_gamer_dev` · sin evidencia en producción | [`docs/evidencia/Videojuego1Atlas.png`](evidencia/Videojuego1Atlas.png): Atlas muestra `videojuego_1` UNIQUE + PARTIAL, READY, pero en la base **`diario_gamer_dev`**, no en la base de producción |
+| Sin secretos en Git | ✓ | `git grep` de cadenas `mongodb://` o `mongodb+srv://` con credenciales en los archivos seguidos: ninguna (2026-11-16) |
+| PR `feature/e2-metas-rachas` → `main` | ✓ fusionado | PR #3, «E2 · Metas y rachas: metas semanales, progreso, rachas e hitos (T-01 a T-30)» |
+
 ## Deuda técnica pagada
 
 | Deuda | Ticket | Commit | Qué se hizo |
