@@ -3,6 +3,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import { router as videojuegos } from './routes/videojuegos.routes';
 import { router as partidas } from './routes/partidas.routes';
+import { router as metas } from './routes/metas.routes';
 import { requestId } from './middlewares/requestId';
 import { logger } from './middlewares/logger';
 import { errorHandler } from './middlewares/errorHandler';
@@ -27,6 +28,7 @@ export function crearApp(entorno: Pick<Entorno, 'corsOrigin' | 'permitirErrorPru
 
   app.use('/api/videojuegos', videojuegos);
   app.use('/api/partidas', partidas);
+  app.use('/api/metas', metas);
 
   if (entorno.permitirErrorPrueba) {
     // Solo en local (PERMITIR_ERROR_PRUEBA=true): permite comprobar el manejo del error 500.

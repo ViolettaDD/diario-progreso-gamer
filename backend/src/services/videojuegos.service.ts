@@ -1,5 +1,6 @@
 import { Videojuego, ESTADOS } from '../modelos/Videojuego.model';
 import { Partida } from '../modelos/Partida.model';
+import { Meta } from '../modelos/Meta.model';
 import { ApiError } from '../apiError';
 import { elegirCampos, exigirObjeto, exigirObjectId } from '../validacion';
 
@@ -29,9 +30,13 @@ export async function actualizar(id: string, body: unknown) {
   return juego;
 }
 
-/** Elimina el videojuego y, en cascada, sus partidas para no dejar referencias huérfanas. */
+/**
+ * Elimina el videojuego y, en cascada, sus metas y sus partidas (RN-08), en este orden: metas → partidas → videojuego.
+ * Sin transacción (P4b diferido): si algo falla a mitad, el juego sigue existiendo y el borrado se puede reintentar.
+ */
 export async function eliminar(id: string) {
   await obtener(id);
+  await Meta.deleteMany({ videojuego: id });
   await Partida.deleteMany({ videojuego: id });
   await Videojuego.findByIdAndDelete(id);
 }

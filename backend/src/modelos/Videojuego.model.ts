@@ -32,16 +32,25 @@ const videojuegoSchema = new Schema(
     plataforma: {
       type: String,
       required: [true, 'La plataforma es obligatoria'],
-      enum: { values: [...PLATAFORMAS], message: 'Plataforma inválida: {VALUE}. Usa PC, PlayStation, Xbox, Switch o Movil' },
+      enum: {
+        values: [...PLATAFORMAS],
+        message: 'Plataforma inválida: {VALUE}. Usa PC, PlayStation, Xbox, Switch o Movil',
+      },
     },
     genero: {
       type: String,
       required: [true, 'El género es obligatorio'],
-      enum: { values: [...GENEROS], message: 'Género inválido: {VALUE}. Usa accion, rol, estrategia, puzzle, deportes u otro' },
+      enum: {
+        values: [...GENEROS],
+        message: 'Género inválido: {VALUE}. Usa accion, rol, estrategia, puzzle, deportes u otro',
+      },
     },
     estado: {
       type: String,
-      enum: { values: [...ESTADOS], message: 'Estado inválido: {VALUE}. Usa jugando, pausado, completado o abandonado' },
+      enum: {
+        values: [...ESTADOS],
+        message: 'Estado inválido: {VALUE}. Usa jugando, pausado, completado o abandonado',
+      },
       default: 'jugando',
     },
     logros: {

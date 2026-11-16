@@ -4,6 +4,7 @@ import { DetalleVideojuego } from './paginas/DetalleVideojuego';
 import { FormularioVideojuego } from './paginas/FormularioVideojuego';
 import { ListaPartidas } from './paginas/ListaPartidas';
 import { FormularioPartida } from './paginas/FormularioPartida';
+import { FormularioMeta } from './paginas/FormularioMeta';
 
 export default function App() {
   return (
@@ -35,6 +36,9 @@ export default function App() {
           <Route path="/videojuegos/:id/editar" element={<FormularioVideojuego />} />
           <Route path="/partidas" element={<ListaPartidas />} />
           <Route path="/partidas/nueva" element={<FormularioPartida />} />
+          <Route path="/partidas/:id/editar" element={<FormularioPartida />} />
+          <Route path="/videojuegos/:videojuegoId/meta/nueva" element={<FormularioMeta />} />
+          <Route path="/metas/:metaId/editar" element={<FormularioMeta />} />
           <Route
             path="*"
             element={

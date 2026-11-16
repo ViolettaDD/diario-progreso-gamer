@@ -90,11 +90,20 @@ export function ListaPartidas() {
                 return (
                   <tr key={p._id}>
                     <td>{formatearFecha(p.fecha)}</td>
-                    <td>{juegoId ? <Link to={`/videojuegos/${juegoId}`}>{nombreVideojuego(p.videojuego)}</Link> : nombreVideojuego(p.videojuego)}</td>
+                    <td>
+                      {juegoId ? (
+                        <Link to={`/videojuegos/${juegoId}`}>{nombreVideojuego(p.videojuego)}</Link>
+                      ) : (
+                        nombreVideojuego(p.videojuego)
+                      )}
+                    </td>
                     <td>{p.duracionMinutos} min</td>
                     <td>{p.porcentajeAvance}%</td>
                     <td>{p.notas || '—'}</td>
                     <td>
+                      <Link to={`/partidas/${p._id}/editar`} className="boton boton-secundario">
+                        Editar
+                      </Link>{' '}
                       <button type="button" className="boton-texto" disabled={ocupado} onClick={() => borrar(p)}>
                         Eliminar
                       </button>

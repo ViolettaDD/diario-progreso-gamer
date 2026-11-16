@@ -27,6 +27,11 @@
   --radio-grande: 22px;
   --radio-chico: 12px;
   --sombra: 0 18px 40px rgba(0, 0, 0, 0.5);
+  /* E2 · Metas y rachas (DESIGN.md) */
+  --meta-ok: var(--jugando);
+  --meta-pendiente: var(--tinta-suave);
+  --racha: var(--acento);
+  --tinta-oscura: #1a0c00; /* sin uso por ahora (anotada en P6) */
   color-scheme: dark;
 }
 
@@ -282,3 +287,17 @@ textarea { resize: vertical; }
   text-shadow: 3px 3px 0 rgba(255, 61, 84, 0.8);
 }
 
+/* E2 · Sección de progreso semanal (T-25). Solo variables de :root; espaciado de la escala de DESIGN.md. */
+.progreso-seccion { margin-bottom: 1.25rem; }
+.progreso-semana { margin: 0; color: var(--tinta-suave); }
+.progreso-datos { margin-top: 1rem; }
+.progreso-cifra { color: var(--racha); }
+/* E2 · Hitos y aviso de juego terminado (T-26). El estado del hito también va escrito, no solo en color. */
+.hito-lista { list-style: none; padding: 0; margin: 0; }
+.hito-alcanzado { color: var(--meta-ok); }
+.hito-pendiente { color: var(--meta-pendiente); }
+.meta-aviso { border: medium solid var(--acento); color: var(--tinta); }
+/* E2 · Formulario de meta (T-27). El editor de hitos reutiliza .editor-logros y .fila-logro. */
+.meta-limite { color: var(--tinta-suave); }
+/* E2 · Historial de metas (T-28). Cada fila reutiliza .encabezado-panel y el panel, .progreso-seccion. */
+.historial-lista { list-style: none; padding: 0; margin: 0; }
